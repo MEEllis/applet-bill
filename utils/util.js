@@ -23,10 +23,10 @@ function formatTime(date, fmt = 'yyyy-MM-dd') {
 /**
  * 封封微信的的request
  */
-function request(url, data = {}, method = "POST",config) {
+function request(url, data = {}, method = "POST", config) {
   return new Promise(function(resolve, reject) {
-    config = config||{};
-    if (config.hideLoading !== true){
+    config = config || {};
+    if (config.hideLoading !== true) {
       wx.showLoading({
         title: '小云拼命加载中...',
         mask: true,
@@ -52,7 +52,10 @@ function request(url, data = {}, method = "POST",config) {
           // 未登录时（-1），先调用自动登录
           else if (res.data.result == -1) {
             console.log(res.data)
-            loginByWeixin().then(({ code, userInfo }) => {
+            loginByWeixin().then(({
+              code,
+              userInfo
+            }) => {
               return request(
                 api.authAutoLogin, {
                   code: code,
@@ -115,13 +118,16 @@ function checkSession() {
 function loginByWeixin() {
 
   let code = null;
-  return new Promise(function (resolve, reject) {
+  return new Promise(function(resolve, reject) {
 
     return login().then((res) => {
       code = res.code;
       return getUserInfo();
     }).then((userInfo) => {
-      resolve({ code, userInfo });
+      resolve({
+        code,
+        userInfo
+      });
     }).catch((err) => {
       reject(err);
     })
@@ -194,6 +200,42 @@ function getScrollHeight(subHeight) {
     });
   });
 }
+
+
+//获取滚动高度通过元素获取高度
+function getScrollHeightByEle(subEle) {
+  return new Promise(function(resolve, reject) {
+    wx.getSystemInfo({
+      success: function(res) {
+        var query = wx.createSelectorQuery();
+        let scrollHeight = res.windowHeight;
+        if (Array.isArray(subEle)) {
+          for (let i = 0; i < subEle.length; i++) {
+            const subEleItem = subEle[i];
+            query.select('.' + subEleItem).boundingClientRect(function(rect) {})
+          }
+          query.exec(res => {
+            res.forEach((value, index, array) => {
+              if (value) {
+                scrollHeight = scrollHeight - value.height
+              }
+            })
+            resolve(scrollHeight);
+          });
+        } else {
+          query.select('.' + subEle).boundingClientRect(function(rect) {
+            scrollHeight = scrollHeight - rect.height
+            resolve(scrollHeight);
+          }).exec();
+        }
+      },
+      fail: function(err) {
+        reject(err);
+      }
+    });
+  });
+}
+
 
 function stringNull(arg) {
   if (arg === null || arg === undefined) {
@@ -307,6 +349,7 @@ module.exports = {
   login,
   getUserInfo,
   getScrollHeight,
+  getScrollHeightByEle,
   stringNull,
   getMainPage,
   accAdd,

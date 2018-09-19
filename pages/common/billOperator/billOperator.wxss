@@ -1,0 +1,52 @@
+.weui-cell::before {
+  left: 15px;
+}
+
+.txt-input-price {
+  height: 70rpx;
+  width: 440rpx;
+  float: right;
+  font-weight: 600;
+  font-size: 50rpx;
+}
+
+.txt-input {
+  border: solid 1rpx #d9d9d9;
+  border-radius: 6rpx;
+  height: 66rpx;
+  width: 440rpx;
+  text-align: left;
+  float: right;
+}
+
+.txt-input-remark {
+  width: 100%;
+  height: 150rpx;
+  padding: 20rpx 0rpx;
+  text-align: left;
+}
+
+button {
+  border-radius: 0 !important;
+  font-size: 36rpx;
+  height: 98rpx;
+  line-height: 98rpx;
+  color: #fff;
+}
+
+button::after, button::before {
+  border: none !important;
+}
+
+.del {
+  background-color: #ff3b30 !important;
+}
+
+.ok {
+  background-color: #476ec9 !important;
+}
+
+.cancle {
+  background-color: #fff !important;
+  color: #333;
+}

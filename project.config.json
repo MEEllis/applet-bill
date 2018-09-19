@@ -8,7 +8,7 @@
 		"newFeature": true
 	},
 	"compileType": "miniprogram",
-	"libVersion": "2.1.1",
+	"libVersion": "2.3.0",
 	"appid": "wxbebb5fca8a3b9e3d",
 	"projectname": "applet-bills",
 	"isGameTourist": false,
@@ -30,7 +30,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 0,
+			"current": 33,
 			"list": [
 				{
 					"id": 0,
@@ -150,7 +150,7 @@
 					"id": 19,
 					"name": "billing/addGood",
 					"pathName": "pages/billing/addGood/addGood",
-					"query": "customerTelephone=15608631192&sectionId=72&goodsId=34"
+					"query": ""
 				},
 				{
 					"id": 20,
@@ -229,6 +229,11 @@
 					"name": "/billing/selSection",
 					"pathName": "pages/billing/selSection/selSection",
 					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "common/billOperator",
+					"pathName": "pages/common/billOperator/billOperator"
 				}
 			]
 		}

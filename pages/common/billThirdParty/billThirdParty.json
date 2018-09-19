@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "wux-toptips": "/component/toptips/index",
+    "inputNum": "/component/inputNum/inputNum"
+  }
+}

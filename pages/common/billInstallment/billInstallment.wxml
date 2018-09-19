@@ -1,0 +1,122 @@
+<wxs src="../../../filter/numberFr.wxs" module="numberFr"></wxs>
+<wux-toptips id="wux-toptips" />
+<scroll-view scroll-y='true' class="list-wrap" style="height:{{scrollHeight}}px;">
+  <view class="weui-cells weui-cells_after-title">
+    <view class="weui-cell">
+      <text class='color666'>可供分期金额</text>
+      <view class="weui-cell__bd tr" style='color: #ffaf23;'>
+        {{numberFr.formatNum(totalAmount,2)}}
+      </view>
+    </view>
+    <view class="weui-cell" bindtap='tapShowDetail' data-target='installmentName'>
+      <text class='colore94'>*</text>
+      <text class='color666'>分期商名称</text>
+      <view class="weui-cell__bd tr">
+        {{numberFr.stringNull(installmentName)}}
+      </view>
+      <view class="weui-cell__ft iconfont icon-shangyige"></view>
+    </view>
+    <view class="weui-cell" bindtap='tapShowDetail' data-target='businessName'>
+      <text class='colore94'>*</text>
+      <text class='color666'>业务名称</text>
+      <view class="weui-cell__bd tr">
+        {{numberFr.stringNull(businessName)}}
+      </view>
+      <view class="weui-cell__ft iconfont icon-shangyige"></view>
+    </view>
+
+    <view class="weui-cell">
+      <text class='colore94'>*</text>
+      <text class='color666'>分期金额</text>
+      <view class="weui-cell__bd tr">
+        <inputNum class='txt-input-price' num="{{instalmentAmount}}" bindchangeEvent='bindInputPrice' data-target='instalmentAmount'></inputNum>
+      </view>
+    </view>
+    <view class="weui-cell">
+      <text class='colore94'>*</text>
+      <text class='color666'>首付金额</text>
+      <view class="weui-cell__bd tr">
+        <inputNum class='txt-input-price' num="{{downPaymentAmount}}" bindchangeEvent='bindInputPrice' data-target='downPaymentAmount'></inputNum>
+      </view>
+    </view>
+    <view class="weui-cell">
+      <text class='color666'>分期贷款金额</text>
+      <view class="weui-cell__bd tr">
+        {{numberFr.formatNum(loanAmount,2)}}
+      </view>
+    </view>
+    <view class="weui-cell">
+      <text class='color666'>佣金比例(%)</text>
+      <view class="weui-cell__bd tr">
+        {{numberFr.formatNum(commissionRate)}}
+      </view>
+    </view>
+    <view class="weui-cell">
+      <text class='colore94'>*</text>
+      <text class='color666'>预计佣金</text>
+      <view class="weui-cell__bd tr">
+        <inputNum class='txt-input-price' num="{{estimatedCommissionAmount}}" bindchangeEvent='bindInputPrice' data-target='estimatedCommissionAmount'></inputNum>
+      </view>
+    </view>
+    <view class="weui-cell">
+      <text class='color666'>手续费比例(%)</text>
+      <view class="weui-cell__bd tr">
+        {{numberFr.formatNum(feeRatio)}}
+      </view>
+    </view>
+    <view class="weui-cell">
+      <text class='colore94'>*</text>
+      <text class='color666'>手续费金额</text>
+      <view class="weui-cell__bd tr">
+        <inputNum class='txt-input-price' num="{{procedureFeeAmount}}" bindchangeEvent='bindInputPrice' data-target='procedureFeeAmount'></inputNum>
+      </view>
+    </view>
+    <view class="weui-cell">
+      <text class='color666'>扣费后贷款金额</text>
+      <view class="weui-cell__bd tr">
+        {{numberFr.formatNum(excludeProcedureFeeLoanAmount,2)}}
+      </view>
+    </view>
+    <view class="weui-cell">
+      <text class='color666'>合同号</text>
+      <view class="weui-cell__bd tr">
+        <input class='txt-input' type="text" placeholder="请输入合同号" value="{{contractNo}}" bindinput="bindText" data-target='contractNo' />
+      </view>
+    </view>
+    <view class="weui-cell">
+      <text class='color666'>串号</text>
+      <view class="weui-cell__bd tr">
+        <input class='txt-input' type="text" placeholder="请输入串号" value="{{phoneImei}}" bindinput="bindText" data-target='phoneImei' />
+      </view>
+    </view>
+    <view class="weui-cell">
+      <text class='colore94'>*</text>
+      <text class='color666'>分期数</text>
+      <view class="weui-cell__bd tr">
+        <stepper class='fr' num="{{installmentCount}}" bindchangeEvent='bindInputPrice' data-target='installmentCount'></stepper>
+      </view>
+    </view>
+    <view class="weui-cell">
+      <text class='color666'>月供</text>
+      <view class="weui-cell__bd tr">
+        {{numberFr.formatNum(monthlyPayAmount,2)}}
+      </view>
+    </view>
+    <view class="weui-cell">
+      <view class="weui-cell__bd tr">
+        <textarea class='txt-input-remark' placeholder="点我添加备注" value="{{remark}}" maxlength='200' bindinput="bindText" data-target='remark' />
+      </view>
+    </view>
+  </view>
+</scroll-view>
+<view class='weui-flex btn-wrap'>
+  <button type='defualt' wx:if="{{state=='0'}}" class="weui-flex__item cancle" bindtap='tapCancle'>
+    取消
+  </button>
+  <button type='defualt' wx:else class="weui-flex__item del" bindtap='tapDel'>
+    删除
+  </button>
+  <button type='defualt' class="weui-flex__item ok" bindtap='tapOk'>
+    确定
+  </button>
+</view>

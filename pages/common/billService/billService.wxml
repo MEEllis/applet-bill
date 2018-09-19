@@ -1,0 +1,94 @@
+<wxs src="../../../filter/numberFr.wxs" module="numberFr"></wxs>
+<wux-toptips id="wux-toptips" />
+<scroll-view scroll-y='true' class="list-wrap" style="height:{{scrollHeight}}px;">
+  <view class="weui-cells weui-cells_after-title">
+    <view class="weui-cell" bindtap='tapShowDetail' data-target='addService'>
+      <text class='colore94'>*</text>
+      <text class='color666'>增值服务名称</text>
+      <view class="weui-cell__bd tr">
+        {{numberFr.stringNull(serviceName)}}
+      </view>
+      <view class="weui-cell__ft iconfont icon-shangyige"></view>
+    </view>
+    <view class="weui-cell">
+      <text class='colore94'>*</text>
+      <text class='color666'>实际收款</text>
+      <view class="weui-cell__bd tr">
+        <inputNum class='txt-input-price' num="{{actualReceivedAmount}}" bindchangeEvent='bindInputPrice' data-target='actualReceivedAmount'></inputNum>
+      </view>
+    </view>
+    <view class="weui-cell">
+      <text class='color666'>生效日期</text>
+      <view class="weui-cell__bd tr">
+        <picker mode="date" value="{{effectiveDateStr}}" bindchange="bindDateStart">
+          <view class="picker ">
+            {{effectiveDateStr}}
+          </view>
+        </picker>
+      </view>
+      <view class="weui-cell__ft iconfont icon-shangyige"></view>
+    </view>
+    <view class="weui-cell">
+      <text class='color666'>预估售价</text>
+      <view class="weui-cell__bd tr">
+        {{numberFr.formatNum(presetPrice,2)}}
+      </view>
+    </view>
+    <view class="weui-cell">
+      <text class='color666'>会员价</text>
+      <view class="weui-cell__bd tr">
+        {{numberFr.formatNum(vipPrice,2)}}
+      </view>
+    </view>
+    <view class="weui-cell" bindtap='tapShowDetail' data-target='addServiceGoodIndex'>
+      <text class='color666'>商品序号</text>
+      <view class="weui-cell__bd tr">
+        {{numberFr.stringNull(goodsDetailNo)}}
+      </view>
+      <view class="weui-cell__ft iconfont icon-shangyige"></view>
+    </view>
+    <view class="weui-cell">
+      <text class='color666'>商品名称</text>
+      <view class="weui-cell__bd tr">
+        {{numberFr.stringNull(goodsName)}}
+      </view>
+    </view>
+    <view class="weui-cell">
+      <text class='color666'>手机串号</text>
+      <view class="weui-cell__bd tr">
+        <text wx:if="{{(imei!='' && imei!=undefined && imei!=null)}}">主串：{{numberFr.stringNull(imei)}}</text>
+        <text wx:if="{{(auxiliaryImei!=''&& auxiliaryImei!=undefined && auxiliaryImei!=null) }}">
+          辅串：{{numberFr.stringNull(auxiliaryImei)}}        
+        </text>
+      </view>
+    </view>
+    <view class="weui-cell">
+      <text class='color666'>使用次数</text>
+      <view class="weui-cell__bd tr">
+        {{numberFr.formatNum(usedTimes)}}
+      </view>
+    </view>
+    <view class="weui-cell">
+      <text class='color666'>有限期限</text>
+      <view class="weui-cell__bd tr">
+        {{numberFr.formatNum(limitedPeriod)}}
+      </view>
+    </view>
+    <view class="weui-cell">
+      <view class="weui-cell__bd tr">
+        <textarea class='txt-input-remark' placeholder="点我添加备注" value="{{remark}}" maxlength='200' bindinput="bindText" data-target='remark' />
+      </view>
+    </view>
+  </view>
+</scroll-view>
+<view class='weui-flex btn-wrap'>
+  <button type='defualt' wx:if="{{state=='0'}}" class="weui-flex__item cancle" bindtap='tapCancle'>
+    取消
+  </button>
+  <button type='defualt' wx:else class="weui-flex__item del" bindtap='tapDel'>
+    删除
+  </button>
+  <button type='defualt' class="weui-flex__item ok" bindtap='tapOk'>
+    确定
+  </button>
+</view>

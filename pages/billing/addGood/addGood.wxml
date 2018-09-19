@@ -1,10 +1,19 @@
 <wxs src="../../../filter/numberFr.wxs" module="numberFr"></wxs>
-<view class="container  {{goodsVo.length===0?'pb-20':''}}">
+<view class="container">
+  <!-- 菜单 -->
   <view class="weui-flex banner-top">
+    <view class="weui-flex__item" bindtap='tapAddSheet'>
+      <view class='iconfont icon-maishangpin'></view>
+      <view class=''>卖商品</view>
+    </view>
     <view class="weui-flex__item" bindtap='tapPrevious'>
+      <view class='iconfont icon-tianjiayewu'></view>
+      <view class=''>办业务</view>
+    </view>
+    <!-- <view class="weui-flex__item" bindtap='tapPrevious'>
       <view class='iconfont icon-shangyibu'></view>
       <view class=''>上一步</view>
-    </view>
+    </view> -->
     <view class="weui-flex__item ">
     </view>
     <view class="weui-flex__item " bindtap='tapDelDraft'>
@@ -15,136 +24,451 @@
     </view>
 
     <view class="weui-flex__item" bindtap='tapSaveDraft'>
-      <view class='iconfont icon-baocuncaogaodan'></view>
+      <view class='iconfont icon-baocuncaogaodan1'></view>
       <view class=''>存草稿</view>
     </view>
+
     <view class="weui-flex__item " bindtap='tapNewDraft'>
-      <view class='iconfont icon-kaidan'></view>
+      <view class='iconfont icon-xinkaidan'></view>
       <view class=''>新开单</view>
     </view>
   </view>
-</view>
-<view hidden='{{goodsVo.length!==0}}' class='add-good'>
-
-  <view class="weui-flex c1">
-    <view class="weui-flex__item ">
-      <view class='iconfont icon-luru' bindtap='tapLuru'></view>
-      <view class=''>录串号</view>
-    </view>
-
-    <view class="weui-flex__item " bindtap='tapSelGood' style='border-left: 1px solid #efeff4'>
-      <view class='iconfont icon-sousuo1'></view>
-      <view class=''>选商品</view>
-    </view>
-
-  </view>
-  <view class="weui-flex saoma" bindtap='tapScanCode'>
-    <view class="weui-flex__item">
-      <view class='iconfont icon-iconfontsaoyisao1'></view>
-      <view class='color2'>扫串号/条码</view>
-    </view>
-
-  </view>
-</view>
-<view hidden='{{goodsVo.length===0}}' class='good-wrap'>
-  <view class="container pb-20" bindtap="tapAddSheet">
-    <view class='add-button'>
-      <text class='iconfont icon-shibai1'></text> 添加商品
-    </view>
-  </view>
-  <scroll-view scroll-y='true' style="height:{{scrollHeight}}px;" class='good-list '>
-    <view class='good-item  mb-20' wx:for-items="{{goodsVo}}" wx:key="*this">
-      <view class='good-body'>
-        <view class='good-item-wrap {{item.isGift==1?"is-gift":""}}' style="{{item.txtStyle}}" bindtouchstart="touchS" bindtouchmove="touchM" bindtouchend="touchE" data-index="{{index}}">
-
-          <navigator url='/pages/billing/goodDetail/goodDetail?sectionId={{sectionId}}&goodsId={{item.goodsId}}&imeiId={{item.imeiId}}&storageId={{item.storageId}}&ifManageImei={{item.ifManageImei}}&isSee=1&goodIndex={{index}}&isGift={{item.isGift}}' class='good-item-con '>
-            <view class='good-name pb-10'>{{index+1}}.{{item.goodsName}}</view>
-            <view class="weui-flex ">
-              <view class="weui-flex__item lab">
-                零售标价：
-              </view>
-              <view class="weui-flex__item labv">
-                {{numberFr.formatNum(item.retailPrice,2)}}
-              </view>
-              <view class="weui-flex__item lab">
-                折后单价：
-              </view>
-              <view class="weui-flex__item labv">
-                {{numberFr.formatNum(item.discountedPrice,2)}}
-              </view>
+  <!-- 单据详情 -->
+  <scroll-view scroll-y='true' style="height:{{scrollHeight}}px;" class='good-list'>
+    <!-- 会员信息 -->
+    <view class='vipVo-wrap'>
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell">
+          <view class="weui-cell__hd">
+            <text class='iconfont icon-mendian'></text>
+          </view>
+          <picker range-key="name" class="weui-cell__bd ellipsis" bindchange="bindPickerChange" value="{{sectionIndex}}" range="{{sectionList}}">
+            <view class="picker">
+              {{sectionName}}
             </view>
-            <view class="weui-flex ">
-              <view class="weui-flex__item lab">
-                数量：
-              </view>
-              <view class="weui-flex__item labv">
-                {{numberFr.formatNum(item.goodsNumber)}}
-              </view>
-              <view class="weui-flex__item lab">
-                折后金额：
-              </view>
-              <view class="weui-flex__item labv">
-                {{numberFr.formatNum(item.discountedAmount,2)}}
-              </view>
-            </view>
-            <view class="weui-flex ">
-              <view class="weui-flex__item lab">
-                备注：
-              </view>
-              <view class="weui-flex__item labv">
-                {{numberFr.stringNull(item.remark)}}
-              </view>
+          </picker>
 
+          <view class="weui-cell__ft iconfont icon-shangyige"></view>
+        </view>
+        <view class="weui-cell ">
+          <view class="weui-cell__hd">
+            <text class='iconfont icon-iconcustomer'></text>
+          </view>
+          <view class="weui-cell__bd">客户信息</view>
+          <view wx:if='{{vipVo!==null&&customerTelephone.length===11}}' class="weui-cell__ft desc">
+            <text wx:if='{{vipVo.status==1}}'>该会员已禁用,不享有相应会员类型服务</text>
+            <text class='color1' wx:else hidden='{{discountRate==10}}'>该会员享受部分商品{{discountRate}}折优惠</text>
+          </view>
+        </view>
+      </view>
+      <view>
+        <view class='form'>
+          <view class="weui-flex">
+            <text class='color3'>客户电话:</text>
+            <view class=" weui-flex__item">
+              <input class='txt-input' type="number" placeholder-class='placeholder' focus placeholder="请输入(客户或会员)手机号码" value="{{customerTelephone}}" bindinput="inputTel" maxlength='11' />
             </view>
-
-          </navigator>
-          <view class="weui-flex add-gift">
-            <view class="weui-flex__item  {{item.isGift==1?'disable':''}}" data-isgift='{{item.isGift}}' data-index='{{index}}' bindtap='tapAddGift'>
-              添加赠品
+          </view>
+          <view hidden='{{customerTelephone.length!==11}}' class="weui-flex">
+            <text class='color3'>客户姓名:</text>
+            <view class=" weui-flex__item">
+              <text wx:if='{{vipVo!==null&&customerTelephone.length===11}}'>{{numberFr.stringNull(vipVo.customerName)}}</text>
+              <input class='txt-input' wx:else bindinput="inputName" placeholder-class='placeholder' focus="true" placeholder="请输入客户姓名" value="{{customerName}}" />
             </view>
-            <view class="weui-flex__item sz {{item.isGift==1?'disable':''}}  {{item.giftList.length>0?'disable':''}}" data-isgift='{{item.isGift}}' data-index='{{index}}' data-len="{{item.giftList.length}}" bindtap='tapSetGift'>
-              设为赠品
+          </view>
+          <view wx:if='{{vipVo!==null&&customerTelephone.length===11}}' class="weui-flex">
+            <text class='color3'>会员类型:</text>
+            <view class=" weui-flex__item">
+              {{numberFr.stringNull(vipVo.vipCardTypeName)}}
+            </view>
+          </view>
+          <view wx:if='{{vipVo!==null&&customerTelephone.length===11}}' class="weui-flex jf">
+            <text class='color3'>会员积分:</text>
+            <view class=" weui-flex__item">
+              {{numberFr.formatNum(vipVo.vipCardScore)}}
             </view>
           </view>
         </view>
-        <!--这里是左滑按钮部分----start-->
-        <view class="posit weui-flex">
-          <view class="del weui-flex__item" data-isgift='{{item.isGift}}' data-goodindex="{{index}}" catchtap="delGood">
-            删除
-          </view>
-        </view>
-        <!--这里是左滑按钮部分----end-->
-      </view>
-      <view class='gift-wrap border-top' wx:for-items="{{item.giftList}}" wx:key="*this" wx:for-index="idx" wx:for-item="itemName">
-        <navigator url='/pages/billing/goodDetail/goodDetail?sectionId={{sectionId}}&goodsId={{itemName.goodsId}}&imeiId={{itemName.imeiId}}&storageId={{itemName.storageId}}&ifManageImei={{itemName.ifManageImei}}&isSee=1&goodIndex={{index}}&giftIndex={{idx}}&isGift={{itemName.isGift}}'>
-          <view class='weui-flex'>
-            <view class="weui-flex__item ">
-              {{idx+1}}.{{itemName.goodsName}}
-            </view>
-          </view>
-          <view class='gift-con'>
-            <view class='weui-flex'>
-              <view class="weui-flex__item gift-lab">
-                数量：
-              </view>
-              <view class="weui-flex__item gift-val">
-                {{numberFr.formatNum(itemName.goodsNumber)}}
-              </view>
-            </view>
-            <view class='weui-flex'>
-              <view class="weui-flex__item gift-lab">
-                备注：
-              </view>
-              <view class="weui-flex__item gift-val">
-                {{numberFr.stringNull(itemName.remark)}}
-              </view>
-            </view>
-          </view>
-
-        </navigator>
       </view>
     </view>
+    <!-- 商品信息 -->
+    <view class='good-wrap'>
+      <view class="weui-flex tap" data-target="good">
+        <view class="weui-cell__bd">商品</view>
+        <view class="weui-flex__item add-wrap" bindtap='tapScanCode'>
+          <text class='iconfont icon-saoyisao'></text>
+          <view class=''>扫串号/条码</view>
+        </view>
+        <view class="weui-flex__item add-wrap" bindtap='tapLuru'>
+          <text class='iconfont icon-luruchuanhao'></text>
+          <view class=''>录串号</view>
+        </view>
+        <view class="weui-flex__item add-wrap" bindtap='tapSelGood'>
+          <text class='iconfont icon-sousuoxuanshangpin'></text>
+          <view class=''>选商品</view>
+        </view>
+      </view>
+      <view class='item-wrap'>
+        <view class='good-item  mb-20' wx:for-items="{{goodsVo}}" wx:key="">
+          <view class='item-body'>
+            <i-swipeout i-class="i-swipeout-item" operate-width="{{delBtnWidth}}" toggle="{{goodsToggle}}">
+              <view slot="content">
+                <view class='item-body-wrap {{item.isGift==1?"is-gift":""}}' data-index="{{index}}">
+                  <navigator url='/pages/billing/goodDetail/goodDetail?sectionId={{sectionId}}&goodsId={{item.goodsId}}&imeiId={{item.imeiId}}&storageId={{item.storageId}}&ifManageImei={{item.ifManageImei}}&isSee=1&goodIndex={{index}}&isGift={{item.isGift}}'>
+                    <view class='item-name pb-10'>{{index+1}}.{{item.goodsName}}</view>
+                    <view class="weui-flex ">
+                      <view class="weui-flex__item lab">
+                        零售标价：
+                      </view>
+                      <view class="weui-flex__item labv">
+                        {{numberFr.formatNum(item.retailPrice,2)}}
+                      </view>
+                      <view class="weui-flex__item lab">
+                        折后单价：
+                      </view>
+                      <view class="weui-flex__item labv">
+                        {{numberFr.formatNum(item.discountedPrice,2)}}
+                      </view>
+                    </view>
+                    <view class="weui-flex ">
+                      <view class="weui-flex__item lab">
+                        数量：
+                      </view>
+                      <view class="weui-flex__item labv">
+                        {{numberFr.formatNum(item.goodsNumber)}}
+                      </view>
+                      <view class="weui-flex__item lab">
+                        折后金额：
+                      </view>
+                      <view class="weui-flex__item labv">
+                        {{numberFr.formatNum(item.discountedAmount,2)}}
+                      </view>
+                    </view>
+                    <view class="weui-flex ">
+                      <view class="weui-flex__item lab">
+                        备注：
+                      </view>
+                      <view class="weui-flex__item labv">
+                        {{numberFr.stringNull(item.remark)}}
+                      </view>
+
+                    </view>
+                  </navigator>
+                  <view class="weui-flex add-gift">
+                    <view class="weui-flex__item  {{item.isGift==1?'disable':''}}" data-isgift='{{item.isGift}}' data-index='{{index}}' bindtap='tapAddGift'>
+                      添加赠品
+                    </view>
+                    <view class="weui-flex__item sz {{item.isGift==1?'disable':''}}  {{item.giftList.length>0?'disable':''}}" data-isgift='{{item.isGift}}' data-index='{{index}}' data-len="{{item.giftList.length}}" bindtap='tapSetGift'>
+                      设为赠品
+                    </view>
+                  </view>
+                </view>
+              </view>
+              <view slot="button" class="i-swipeout-button-group ">
+                <view class="i-swipeout-button " data-isgift='{{item.isGift}}' data-goodindex="{{index}}" catchtap="delGood">删除</view>
+              </view>
+            </i-swipeout>
+          </view>
+          <!-- 赠品信息 -->
+          <view class='gift-wrap border-top' wx:for-items="{{item.giftList}}" wx:key="" wx:for-index="idx" wx:for-item="itemName">
+            <navigator url='/pages/billing/goodDetail/goodDetail?sectionId={{sectionId}}&goodsId={{itemName.goodsId}}&imeiId={{itemName.imeiId}}&storageId={{itemName.storageId}}&ifManageImei={{itemName.ifManageImei}}&isSee=1&goodIndex={{index}}&giftIndex={{idx}}&isGift={{itemName.isGift}}'>
+              <view class='weui-flex'>
+                <view class="weui-flex__item ">
+                  {{idx+1}}.{{itemName.goodsName}}
+                </view>
+              </view>
+              <view class='gift-con'>
+                <view class='weui-flex'>
+                  <view class="weui-flex__item gift-lab">
+                    数量：
+                  </view>
+                  <view class="weui-flex__item gift-val">
+                    {{numberFr.formatNum(itemName.goodsNumber)}}
+                  </view>
+                </view>
+                <view class='weui-flex'>
+                  <view class="weui-flex__item gift-lab">
+                    备注：
+                  </view>
+                  <view class="weui-flex__item gift-val">
+                    {{numberFr.stringNull(itemName.remark)}}
+                  </view>
+                </view>
+              </view>
+
+            </navigator>
+          </view>
+        </view>
+      </view>
+    </view>
+    <!-- 运营商业务 -->
+    <view class='operator-wrap'>
+      <view class="weui-flex tap">
+        <view class="weui-cell__bd">运营商业务</view>
+        <view class="weui-flex__item add-wrap" data-target="billOperator" data-state="0" bindtap='tapBusiness'>
+          <text class='iconfont icon-shibai1'></text>
+        </view>
+      </view>
+      <view class='item-wrap'>
+        <view class='good-item  mb-20' wx:for-items="{{operatorDetailList}}" wx:key="">
+          <view class='item-body'>
+            <i-swipeout i-class="i-swipeout-item" operate-width="{{delBtnWidth}}" toggle="{{operatorToggle}}">
+              <view slot="content">
+                <view class='item-body-wrap' data-index="{{index}}">
+                  <view data-target="billOperator" data-state="1" data-index="{{index}}" bindtap='tapBusiness'>
+                    <view class='item-name pb-10'>
+                      <view>{{index+1}}.{{numberFr.stringNull(item.contactUnitName)}}</view>
+                      <view>{{numberFr.stringNull(item.businessName)}}</view>
+                    </view>
+                    <view class="weui-flex ">
+                      <view class="weui-flex__item lab">
+                        实际收款：
+                      </view>
+                      <view class="weui-flex__item labv">
+                        {{numberFr.formatNum(item.receivedAmount,2)}}
+                      </view>
+                      <view class="weui-flex__item lab">
+                        预估佣金：
+                      </view>
+                      <view class="weui-flex__item labv">
+                        {{numberFr.formatNum(item.commission,2)}}
+                      </view>
+                    </view>
+                    <view class="weui-flex ">
+                      <view class="weui-flex__item lab">
+                        数量：
+                      </view>
+                      <view class="weui-flex__item labv">
+                        {{numberFr.formatNum(item.businessCount)}}
+                      </view>
+                      <view class="weui-flex__item lab">
+                        佣金金额：
+                      </view>
+                      <view class="weui-flex__item labv">
+                        {{numberFr.formatNum(item.commissionAmount,2)}}
+                      </view>
+                    </view>
+                    <view class="weui-flex ">
+                      <view class="weui-flex__item lab">
+                        备注：
+                      </view>
+                      <view class="weui-flex__item labv">
+                        {{numberFr.stringNull(item.remark)}}
+                      </view>
+                    </view>
+                  </view>
+                </view>
+              </view>
+              <view slot="button" class="i-swipeout-button-group ">
+                <view class="i-swipeout-button" data-index="{{index}}" data-list='operatorDetailList' data-toggle='operatorToggle' catchtap="delBusiness">删除</view>
+              </view>
+            </i-swipeout>
+          </view>
+        </view>
+      </view>
+    </view>
+    <!-- 增值服务 -->
+    <view class='addedService-wrap'>
+      <view class="weui-flex tap">
+        <view class="weui-cell__bd">增值服务</view>
+        <view class="weui-flex__item add-wrap" data-target="billService" data-state="0" bindtap='tapBusiness'>
+          <text class='iconfont icon-shibai1'></text>
+        </view>
+      </view>
+      <view class='item-wrap'>
+        <view class='good-item  mb-20' wx:for-items="{{addServiceDetailList}}" wx:key="">
+          <view class='item-body'>
+            <i-swipeout i-class="i-swipeout-item" operate-width="{{delBtnWidth}}" toggle="{{addServiceToggle}}">
+              <view slot="content">
+                <view class='item-body-wrap' data-index="{{index}}">
+                  <view data-target="billService" data-state="1" data-index="{{index}}" bindtap='tapBusiness'>
+                    <view class='item-name pb-10'>
+                      <view>{{index+1}}.{{numberFr.stringNull(item.serviceName)}}</view>
+                    </view>
+                    <view class="weui-flex ">
+                      <view class="weui-flex__item lab">
+                        预设售价：
+                      </view>
+                      <view class="weui-flex__item labv">
+                        {{numberFr.formatNum(item.presetPrice,2)}}
+                      </view>
+                      <view class="weui-flex__item lab">
+                        实际收款：
+                      </view>
+                      <view class="weui-flex__item labv">
+                        {{numberFr.formatNum(item.actualReceivedAmount,2)}}
+                      </view>
+                    </view>
+                    <view class="weui-flex ">
+                      <view class="weui-flex__item lab">
+                        商品名称：
+                      </view>
+                      <view class="weui-flex__item labv">
+                        {{numberFr.stringNull(item.goodsName)}}
+                      </view>
+                    </view>
+                    <view class="weui-flex ">
+                      <view class="weui-flex__item lab">
+                        备注：
+                      </view>
+                      <view class="weui-flex__item labv">
+                        {{numberFr.stringNull(item.remark)}}
+                      </view>
+                    </view>
+                  </view>
+                </view>
+              </view>
+              <view slot="button" class="i-swipeout-button-group ">
+                <view class="i-swipeout-button" data-index="{{index}}" data-list='addServiceDetailList' data-toggle='addServiceToggle' catchtap="delBusiness">删除</view>
+              </view>
+            </i-swipeout>
+          </view>
+        </view>
+      </view>
+    </view>
+    <!-- 第三方抵扣 -->
+    <view class='thirdParty-wrap'>
+      <view class="weui-flex tap">
+        <view class="weui-cell__bd">第三方抵扣</view>
+        <view class="weui-flex__item add-wrap" data-target="billThirdParty" data-state="0" bindtap='tapBusiness'>
+          <text class='iconfont icon-shibai1'></text>
+        </view>
+      </view>
+      <view class='item-wrap'>
+        <view class='good-item  mb-20' wx:for-items="{{thirdPartyDetailList}}" wx:key="">
+          <view class='item-body'>
+            <i-swipeout i-class="i-swipeout-item" operate-width="{{delBtnWidth}}" toggle="{{thirdPartyToggle}}">
+              <view slot="content">
+                <view class='item-body-wrap' data-index="{{index}}">
+                  <view data-target="billThirdParty" data-state="1" data-index="{{index}}" bindtap='tapBusiness'>
+                    <view class='item-name pb-10'>
+                      <view>{{index+1}}.{{numberFr.stringNull(item.contactUnitName)}}</view>
+                      <view>{{numberFr.stringNull(item.thirdPartyName)}}</view>
+                    </view>
+                    <view class="weui-flex ">
+                      <view class="weui-flex__item lab">
+                        抵现金额：
+                      </view>
+                      <view class="weui-flex__item labv">
+                        {{numberFr.formatNum(item.deductionAmount,2)}}
+                      </view>
+                      <view class="weui-flex__item lab">
+                        结算金额：
+                      </view>
+                      <view class="weui-flex__item labv">
+                        {{numberFr.formatNum(item.settlementAmount,2)}}
+                      </view>
+                    </view>
+                    <view class="weui-flex ">
+                      <view class="weui-flex__item lab">
+                        业务号：
+                      </view>
+                      <view class="weui-flex__item labv">
+                        {{numberFr.stringNull(item.businessNo)}}
+                      </view>
+                    </view>
+                    <view class="weui-flex ">
+                      <view class="weui-flex__item lab">
+                        备注：
+                      </view>
+                      <view class="weui-flex__item labv">
+                        {{numberFr.stringNull(item.remark)}}
+                      </view>
+                    </view>
+                  </view>
+                </view>
+              </view>
+              <view slot="button" class="i-swipeout-button-group ">
+                <view class="i-swipeout-button" data-index="{{index}}" data-list='thirdPartyDetailList' data-toggle='thirdPartyToggle' catchtap="delBusiness">删除</view>
+              </view>
+            </i-swipeout>
+          </view>
+        </view>
+      </view>
+    </view>
+    <!-- 分期业务 -->
+    <view class='installment-wrap'>
+      <view class="weui-flex tap" data-target="service">
+        <view class="weui-cell__bd">分期业务</view>
+        <view class="weui-flex__item add-wrap" data-target="billInstallment" data-state="0" bindtap='tapBusiness'>
+          <text class='iconfont icon-shibai1'></text>
+        </view>
+      </view>
+      <view class='item-wrap'>
+        <view class='good-item  mb-20' wx:for-items="{{installmentDetailList}}" wx:key="">
+          <view class='item-body'>
+            <i-swipeout i-class="i-swipeout-item" operate-width="{{delBtnWidth}}" toggle="{{installmentToggle}}">
+              <view slot="content">
+                <view class='item-body-wrap' data-index="{{index}}">
+                  <view data-target="billInstallment" data-state="1" data-index="{{index}}" bindtap='tapBusiness'>
+                    <view class='item-name pb-10'>
+                      <view>{{index+1}}.{{numberFr.stringNull(item.installmentName)}}</view>
+                      <view>{{numberFr.stringNull(item.businessName)}}</view>
+                    </view>
+                    <view class="weui-flex ">
+                      <view class="weui-flex__item lab">
+                        分期金额：
+                      </view>
+                      <view class="weui-flex__item labv">
+                        {{numberFr.formatNum(item.instalmentAmount,2)}}
+                      </view>
+                      <view class="weui-flex__item lab">
+                        首付金额：
+                      </view>
+                      <view class="weui-flex__item labv">
+                        {{numberFr.formatNum(item.downPaymentAmount,2)}}
+                      </view>
+                    </view>
+                    <view class="weui-flex ">
+                      <view class="weui-flex__item lab">
+                        分期贷款：
+                      </view>
+                      <view class="weui-flex__item labv">
+                        {{numberFr.formatNum(item.loanAmount)}}
+                      </view>
+                      <view class="weui-flex__item lab">
+                        预计佣金：
+                      </view>
+                      <view class="weui-flex__item labv">
+                        {{numberFr.formatNum(item.estimatedCommissionAmount,2)}}
+                      </view>
+                    </view>
+                    <view class="weui-flex ">
+                      <view class="weui-flex__item lab">
+                        手续费：
+                      </view>
+                      <view class="weui-flex__item labv">
+                        {{numberFr.formatNum(item.procedureFeeAmount)}}
+                      </view>
+                      <view class="weui-flex__item lab">
+                        扣费后贷款：
+                      </view>
+                      <view class="weui-flex__item labv">
+                        {{numberFr.formatNum(item.excludeProcedureFeeLoanAmount,2)}}
+                      </view>
+                    </view>
+                    <view class="weui-flex ">
+                      <view class="weui-flex__item lab">
+                        备注：
+                      </view>
+                      <view class="weui-flex__item labv">
+                        {{numberFr.stringNull(item.remark)}}
+                      </view>
+                    </view>
+                  </view>
+                </view>
+              </view>
+              <view slot="button" class="i-swipeout-button-group ">
+                <view class="i-swipeout-button" data-index="{{index}}" data-list='installmentDetailList' data-toggle='installmentToggle' catchtap="delBusiness">删除</view>
+              </view>
+            </i-swipeout>
+          </view>
+        </view>
+      </view>
+    </view>
+
   </scroll-view>
+  <!-- 合计 -->
   <view class="weui-flex sum-wrap">
 
     <view class="weui-flex__item tl aomout">
@@ -160,3 +484,10 @@
     </button>
   </view>
 </view>
+
+
+<!-- <view class="container pb-20" bindtap="tapAddSheet">
+    <view class='add-button'>
+      <text class='iconfont icon-shibai1'></text> 添加商品
+    </view>
+  </view> -->

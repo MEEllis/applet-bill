@@ -1,8 +1,8 @@
 <view class="container">
 
-  <navigator url='/pages/billing/newBilling/newBilling' class="weui-flex">
+  <navigator url='/pages/billing/addGood/addGood' class="weui-flex">
     <view class=" weui-flex__item">
-      <image class='img' src="../../../images/ls.png" lazy-load='true' /> 新开单1
+      <image class='img' src="../../../images/ls.png" lazy-load='true' /> 新开单
     </view>
   </navigator>
   <navigator url='/pages/billing/draftRetailOrderVo/draftRetailOrderVo' class="weui-flex">

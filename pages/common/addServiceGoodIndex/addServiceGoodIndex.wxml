@@ -1,0 +1,20 @@
+<wxs src="../../../filter/numberFr.wxs" module="numberFr"></wxs>
+<!-- 搜索 -->
+<search-bar class="search-bar" placeholder="商品名称" keyWord="{{keyWord}}" bindsearchInput='searchInput' bindsearchSubmit='searchSubmit'></search-bar>
+
+<!-- 商品列表 -->
+<scroll-view scroll-y='true' class="list-wrap" style="height:{{scrollHeight}}px;">
+  <view class='list-item' bindtap='tapSel' data-id="{{item.index}}" data-name="{{item.goodsName}}" data-imei="{{item.imei}}" data-auxiliaryimei="{{item.auxiliaryImei}}" wx:for-items="{{dataList}}" wx:key="">
+    <view class='list-item-title border-bottom'>
+      <view class='weui-cell'>
+        <view class="weui-cell__bd">
+          <view style='font-size: 34rpx;color: #333333;'>{{numberFr.stringNull(item.index)}}.{{numberFr.stringNull(item.goodsName)}}</view>
+          <view wx:if="{{(item.imei!=''&& item.imei!=undefined)&&item.ifManageImei==1}}" style='font-size: 28rpx;color: #666666;'>主串：{{numberFr.stringNull(item.imei)}}</view>
+          <view wx:if="{{(item.auxiliaryImei!='' && item.auxiliaryImei!=undefined)&&item.ifManageImei==1}}" style='font-size: 28rpx;color: #666666;'>辅串：{{numberFr.stringNull(item.auxiliaryImei)}}</view>
+          <view style='font-size: 28rpx;color: #666666;'>备注：{{numberFr.stringNull(item.remark==''?'暂无备注':item.remark)}}</view>
+        </view>
+        <text class='fr iconfont {{activeId==item.index?"icon-toast":""}}'></text>
+      </view>
+    </view>
+  </view>
+</scroll-view>

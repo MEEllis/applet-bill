@@ -8,7 +8,7 @@ Page({
    * 页面的初始数据
    */
   data: {
- 
+
     sectionIndex: 0,
     sectionName: '',
     sectionId: '',
@@ -27,10 +27,10 @@ Page({
     let {
       billsId
     } = options;
-    billsId = billsId === undefined ? '' : billsId,
-      this.setData({
-        billsId,
-      });
+    billsId = billsId === undefined ? '' : billsId;
+    this.setData({
+      billsId,
+    });
     if (billsId != '') {
       this.getRetailDraftOrderVo()
     } else {
@@ -61,12 +61,12 @@ Page({
     ).then(res => {
       let sectionIndex = 0;
       for (let i = 0; i < res.data.dataList.length; i++) {
-        const dataItem=res.data.dataList[i];
+        const dataItem = res.data.dataList[i];
         if (sectionId == dataItem.sectionId) {
           sectionIndex = i;
           break;
         }
-        if (i == res.data.dataList.length-1){
+        if (i == res.data.dataList.length - 1) {
           sectionIndex = i;
           that.setData({
             sectionName: dataItem.name,
@@ -97,10 +97,10 @@ Page({
       sectionId,
     });
 
-    if (billsId!=''){
+    if (billsId != '') {
       util.showErrorToast('切换部门，会清空单据的明细信息！');
     }
-    
+
   },
   inputTel: function(e) {
     const that = this;
@@ -125,12 +125,10 @@ Page({
       customerTelephone: tel,
     });
   },
-
-
-  inputName: function (e) {
+  inputName: function(e) {
     const that = this;
     const customerName = e.detail.value;
-  
+
     this.setData({
       customerName,
     });
@@ -148,12 +146,12 @@ Page({
       return;
     }
 
-    if (customerTelephone!=''){
+    if (customerTelephone != '') {
       if (!reg.phone.test(customerTelephone)) {
         util.showErrorToast('请输入正确的手机号格式！');
         return;
       }
-      if (customerName=='') {
+      if (customerName == '') {
         util.showErrorToast('请输入客户姓名！');
         return;
       }
@@ -199,12 +197,12 @@ Page({
     const {
       billsId
     } = this.data;
-    const that =this;
+    const that = this;
     bill.getRetailDraftOrderVo(billsId).then(res => {
       const {
         orderVo
       } = res.data;
- 
+
       that.setData({
         sectionName: orderVo.sectionName,
         sectionId: orderVo.sectionId,

@@ -11,13 +11,13 @@ let baseApiRootUrl
 //NewApiRootUrl = 'https://pre.phoneerp.com/wxapi/'; 
 
 // 线上的接口
-NewApiRootUrl = 'https://www.phoneerp.com/wxapi/';
-baseApiRootUrl = 'https://api.phoneerp.com/';
+// NewApiRootUrl = 'https://www.phoneerp.com/wxapi/';
+// baseApiRootUrl = 'https://api.phoneerp.com/';
 
 
 // 模拟接口地址
-// NewApiRootUrl = 'http://rap2api.taobao.org/app/mock/13207/wxapi/'; 
-// baseApiRootUrl = 'http://rap2api.taobao.org/app/mock/13207/wxapi/';
+NewApiRootUrl = 'http://rap2api.taobao.org/app/mock/13207/wxapi/'; 
+baseApiRootUrl = 'http://rap2api.taobao.org/app/mock/13207/wxapi/';
 
 
 module.exports = {
@@ -45,6 +45,17 @@ module.exports = {
   getSimpleImeiVoPageList: NewApiRootUrl + 'common/getSimpleImeiVoPageList', //    串号跟踪 / 串号分页模糊查询(预览)
 
   //开单
+  getOperatorContactUnitVoList: NewApiRootUrl + 'common/getOperatorContactUnitVoList', //运营商往来单位
+  getBusinessArchivesVoList: NewApiRootUrl + 'common/getBusinessArchivesVoList', //获取运营商业务名称
+  getAddServiceVoList: NewApiRootUrl + 'common/getAddServiceVoList', //获取增值服务名称
+  getAddServiceInfoVo: NewApiRootUrl + 'common/getAddServiceInfoVo', //获取增值服务详情
+  getThirdPartyContactUnitVoList: NewApiRootUrl + 'common/getThirdPartyContactUnitVoList', //获取第三方抵扣往来单位
+  getThirdPartyVoList: NewApiRootUrl + 'common/getThirdPartyVoList', //获取第三方抵扣活动名称
+  getInstallmentContactUnitVoList: NewApiRootUrl + 'common/getInstallmentContactUnitVoList', //获取分期商往来单位
+  getInstallmentVoList: NewApiRootUrl + 'common/getInstallmentVoList', //获取分期业务名称
+  getSystemNoVoList: NewApiRootUrl + 'common/getSystemNoVoList', //获取运营商系统工号
+
+
   getAccessSectionVoList: NewApiRootUrl + 'common/getAccessSectionVoList', //获取可使用门店
   getVipVo: NewApiRootUrl + 'common/getVipVo', //    会员信息查询
   getImeiGoodsVoByImeiId: NewApiRootUrl + 'common/getImeiGoodsVoByImeiId', //开单 / 零售开单通过串号id查询串号商品信息

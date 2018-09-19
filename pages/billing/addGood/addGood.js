@@ -9,13 +9,26 @@ Page({
    * 页面的初始数据
    */
   data: {
+    sectionIndex: 0,
+    sectionName: '',
     sectionId: '',
+    sectionList: [],
     customerTelephone: '',
     customerName: '',
     totalAmount: 0,
     totalSum: 0,
+    goodsToggle: false,
     goodsVo: [],
+    operatorToggle: false,
+    operatorDetailList: [],
+    addServiceToggle: false,
+    addServiceDetailList: [],
+    thirdPartyToggle: false,
+    thirdPartyDetailList: [],
+    installmentToggle: false,
+    installmentDetailList: [],
     vipVo: {},
+    depositDetail: [],
     delBtnWidth: 80,
     curSelIndex: '',
     scrollHeight: 0,
@@ -27,24 +40,18 @@ Page({
    */
   onLoad: function(options) {
     let {
-      customerTelephone,
-      sectionId,
-      customerName,
       billsId
     } = options;
-    customerTelephone = customerTelephone === undefined ? '' : customerTelephone;
-    sectionId = sectionId === undefined ? '' : sectionId;
-    customerName = customerName === undefined ? '' : customerName;
     billsId = billsId === undefined ? '' : billsId;
     this.setData({
-      customerTelephone,
-      sectionId,
-      customerName,
       billsId,
     });
-
+    if (billsId != '') {
+      this.getRetailDraftOrderVo()
+    } else {
+      this.getysUserInfo();
+    }
     this.getVipVo(); //加载会员信息
-
   },
 
   /**
@@ -116,6 +123,11 @@ Page({
     const {
       goodsVo,
       vipVo,
+      depositDetail,
+      operatorDetailList,
+      addServiceDetailList,
+      thirdPartyDetailList,
+      installmentDetailList,
       billsId,
       sectionId,
       customerTelephone,
@@ -174,7 +186,12 @@ Page({
           "goodsDetailList": goodsDetailList,
           "paymentReceivedOrderVo": {
             "detailList": []
-          }
+          },
+          depositDetail,
+          operatorDetailList,
+          addServiceDetailList,
+          thirdPartyDetailList,
+          installmentDetailList,
         });
 
         util.request(
@@ -296,6 +313,7 @@ Page({
     }
     this.setData({
       goodsVo,
+      addServiceDetailList:[],
     });
   },
   //添加赠品
@@ -422,47 +440,54 @@ Page({
       const {
         orderVo
       } = res.data;
-      //切换部门，不载入商品
-      if (sectionId == orderVo.sectionId) {
-        const {
-          goodsDetailList
-        } = orderVo;
-        if (Array.isArray(goodsDetailList)) {
-          for (let i = 0; i < goodsDetailList.length; i++) {
-            const goodsDetailItem = goodsDetailList[i];
-            if ((goodsDetailItem.orderNo % 1) == 0) {
-              goodsDetailItem.isGift = goodsDetailItem.giftFlag;
-              goodsDetailItem.giftList = [];
+      const {
+        goodsDetailList,
+        depositDetail,
+        operatorDetailList,
+        addServiceDetailList,
+        thirdPartyDetailList,
+        installmentDetailList,
+      } = orderVo;
+      if (Array.isArray(goodsDetailList)) {
+        for (let i = 0; i < goodsDetailList.length; i++) {
+          const goodsDetailItem = goodsDetailList[i];
+          if ((goodsDetailItem.orderNo % 1) == 0) {
+            goodsDetailItem.isGift = goodsDetailItem.giftFlag;
+            goodsDetailItem.giftList = [];
+            if (!!customerTelephone != !!orderVo.customerTelephone) {
+              goodsDetailItem.discountRate = that.getDiscountRateByGoodsClassId(goodsDetailItem)
+              goodInfo.discountedPrice = Number(util.accDiv(util.accMul(goodsDetailItem.retailPrice, goodsDetailItem.discountRate), 100).toFixed(2));
+              goodInfo.discountedAmount = Number(util.accMul(goodInfo.discountedPrice, goodInfo.goodsNumber));
+            }
+            goodsVo.push(goodsDetailItem)
+          }
+        }
+        for (let i = 0; i < goodsDetailList.length; i++) {
+          const goodsDetailItem = goodsDetailList[i];
+          if ((goodsDetailItem.orderNo % 1) != 0) {
+            const orderNoArr = goodsDetailItem.orderNo.split(".");
+            goodsDetailItem.isGift = goodsDetailItem.giftFlag;
+            if (goodsVo[orderNoArr[0]]) {
               if (!!customerTelephone != !!orderVo.customerTelephone) {
                 goodsDetailItem.discountRate = that.getDiscountRateByGoodsClassId(goodsDetailItem)
                 goodInfo.discountedPrice = Number(util.accDiv(util.accMul(goodsDetailItem.retailPrice, goodsDetailItem.discountRate), 100).toFixed(2));
                 goodInfo.discountedAmount = Number(util.accMul(goodInfo.discountedPrice, goodInfo.goodsNumber));
               }
-              goodsVo.push(goodsDetailItem)
-            }
-          }
-          for (let i = 0; i < goodsDetailList.length; i++) {
-            const goodsDetailItem = goodsDetailList[i];
-            if ((goodsDetailItem.orderNo % 1) != 0) {
-              const orderNoArr = goodsDetailItem.orderNo.split(".");
-              goodsDetailItem.isGift = goodsDetailItem.giftFlag;
-              if (goodsVo[orderNoArr[0]]) {
-                if (!!customerTelephone != !!orderVo.customerTelephone) {
-                  goodsDetailItem.discountRate = that.getDiscountRateByGoodsClassId(goodsDetailItem)
-                  goodInfo.discountedPrice = Number(util.accDiv(util.accMul(goodsDetailItem.retailPrice, goodsDetailItem.discountRate), 100).toFixed(2));
-                  goodInfo.discountedAmount = Number(util.accMul(goodInfo.discountedPrice, goodInfo.goodsNumber));
-                }
-                goodsVo[orderNoArr[0]].giftList.push(goodsDetailItem)
-              }
+              goodsVo[orderNoArr[0]].giftList.push(goodsDetailItem)
             }
           }
         }
-        that.setData({
-          goodsVo,
-        });
-
-        that.onShow();
       }
+      that.setData({
+        goodsVo,
+        depositDetail,
+        operatorDetailList,
+        addServiceDetailList,
+        thirdPartyDetailList,
+        installmentDetailList,
+      });
+      that.onShow();
+
     })
   },
   // 获取会员信息
@@ -490,14 +515,14 @@ Page({
               "customerTelephone": customerTelephone,
             },
           });
-        } 
+        }
         //会员
         else {
           // 禁用会员
           if (vipVo.status == 1) {
             // 清空折扣
-            vipVo.defaultDiscountRate=100;
-            vipVo.goodsDiscountList=[];
+            vipVo.defaultDiscountRate = 100;
+            vipVo.goodsDiscountList = [];
             that.setData({
               vipVo: vipVo,
             });
@@ -506,7 +531,7 @@ Page({
               vipVo,
             });
           }
-         
+
         }
 
         if (billsId !== '') {
@@ -568,65 +593,108 @@ Page({
     }
 
   },
-  //手指刚放到屏幕触发
-  touchS: function(e) {
-    //判断是否只有一个触摸点
-    if (e.touches.length == 1) {
-      this.setData({
-        //记录触摸起始位置的X坐标
-        startX: e.touches[0].clientX
-      });
-    }
-  },
-  //触摸时触发，手指在屏幕上每移动一次，触发一次
-  touchM: function(e) {
-    var that = this
-    if (e.touches.length == 1) {
-      //记录触摸点位置的X坐标
-      var moveX = e.touches[0].clientX;
-      //计算手指起始点的X坐标与当前触摸点的X坐标的差值
-      var disX = that.data.startX - moveX;
-      //delBtnWidth 为右侧按钮区域的宽度
-      var delBtnWidth = that.data.delBtnWidth;
-      var txtStyle = "";
-      if (disX == 0 || disX < 0) { //如果移动距离小于等于0，文本层位置不变
-        txtStyle = "left:0px";
-      } else if (disX > 0) { //移动距离大于0，文本层left值等于手指移动距离
-        txtStyle = "left:-" + disX + "px";
-        if (disX >= delBtnWidth) {
-          //控制手指移动距离最大值为删除按钮的宽度
-          txtStyle = "left:-" + delBtnWidth + "px";
+
+
+  getCompanyList: function() {
+    var that = this;
+    const {
+      sectionId
+    } = this.data;
+    util.request(
+      api.getAccessSectionVoList,
+    ).then(res => {
+      let sectionIndex = 0;
+      for (let i = 0; i < res.data.dataList.length; i++) {
+        const dataItem = res.data.dataList[i];
+        if (sectionId == dataItem.sectionId) {
+          sectionIndex = i;
+          break;
+        }
+        if (i == res.data.dataList.length - 1) {
+          sectionIndex = i;
+          that.setData({
+            sectionName: dataItem.name,
+            sectionId: dataItem.sectionId,
+          });
         }
       }
-      //获取手指触摸的是哪一个item
-      var index = e.currentTarget.dataset.index;
-      var list = that.data.goodsVo;
-      //将拼接好的样式设置到当前item中
-      list[index].txtStyle = txtStyle;
-      //更新列表的状态
-      this.setData({
-        goodsVo: list
-      });
-    }
-  },
-  touchE: function(e) {
-    var that = this
-    if (e.changedTouches.length == 1) {
-      //手指移动结束后触摸点位置的X坐标
-      var endX = e.changedTouches[0].clientX;
-      //触摸开始与结束，手指移动的距离
-      var disX = that.data.startX - endX;
-      var delBtnWidth = that.data.delBtnWidth;
-      //如果距离小于删除按钮的1/2，不显示删除按钮
-      var txtStyle = disX > delBtnWidth / 2 ? "left:-" + delBtnWidth + "px" : "left:0px";
-      //获取手指触摸的是哪一项
-      var index = e.currentTarget.dataset.index;
-      var list = that.data.goodsVo;
-      list[index].txtStyle = txtStyle;
-      //更新列表的状态
       that.setData({
-        goodsVo: list
+        sectionList: res.data.dataList,
+        sectionIndex,
       });
+    })
+
+  },
+  bindPickerChange: function(e) {
+    const that = this
+    const index = e.detail.value;
+    const {
+      name,
+      sectionId,
+    } = this.data.sectionList[index]; // 这个id就是选中项的id
+    const {
+      billsId,
+    } = this.data;
+    this.setData({
+      sectionIndex: index,
+      sectionName: name,
+      sectionId,
+      depositDetail: [],
+      operatorDetailList: [],
+      addServiceDetailList: [],
+      thirdPartyDetailList: [],
+      installmentDetailList: [],
+    });
+
+    if (billsId != '') {
+      util.showErrorToast('切换部门，会清空单据的明细信息！');
     }
-  }
+
+  },
+  inputTel: function(e) {
+    const that = this;
+    const tel = e.detail.value;
+    const {
+      customerTelephone
+    } = this.data;
+    if (tel.length >= 11) {
+      if (reg.phone.test(tel)) {
+        this.setData({
+          customerTelephone: tel,
+          addServiceDetailList: [],
+        });
+        this.getVipVo();
+      } else {
+        util.showErrorToast('请输入正确的手机号格式！');
+      }
+      return;
+    }
+    this.setData({
+      vipVo: null,
+      customerName: '',
+      customerTelephone: tel,
+      addServiceDetailList: [],
+    });
+  },
+  inputName: function(e) {
+    const that = this;
+    const customerName = e.detail.value;
+
+    this.setData({
+      customerName,
+    });
+  },
+  getysUserInfo: function() {
+    var that = this
+    wx.getStorage({
+      key: 'userInfo',
+      success: function(res) {
+        that.setData({
+          sectionName: res.data.sectionName,
+          sectionId: res.data.sectionId,
+        });
+        that.getCompanyList();
+      }
+    })
+  },
 })

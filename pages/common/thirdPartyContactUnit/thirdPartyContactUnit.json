@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "第三方抵扣往来单位",
+  "usingComponents": {
+    "search-bar": "/component/search-bar/index"
+  }
+}

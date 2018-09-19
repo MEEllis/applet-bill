@@ -1,0 +1,57 @@
+<wxs src="../../../filter/numberFr.wxs" module="numberFr"></wxs>
+<wux-toptips id="wux-toptips" />
+<scroll-view scroll-y='true' class="list-wrap" style="height:{{scrollHeight}}px;">
+  <view class="weui-cells weui-cells_after-title">
+    <view class="weui-cell" bindtap='tapShowDetail' data-target='thirdPartyContactUnit'>
+      <text class='colore94'>*</text>
+      <text class='color666'>往来单位</text>
+      <view class="weui-cell__bd tr">
+        {{numberFr.stringNull(contactUnitName)}}
+      </view>
+      <view class="weui-cell__ft iconfont icon-shangyige"></view>
+    </view>
+    <view class="weui-cell" bindtap='tapShowDetail' data-target='thirdParty'>
+      <text class='colore94'>*</text>
+      <text class='color666'>活动名称</text>
+      <view class="weui-cell__bd tr">
+        {{numberFr.stringNull(thirdPartyName)}}
+      </view>
+      <view class="weui-cell__ft iconfont icon-shangyige"></view>
+    </view>
+
+    <view class="weui-cell">
+      <text class='color666'>抵现金额</text>
+      <view class="weui-cell__bd tr">
+        <inputNum class='txt-input-price' num="{{deductionAmount}}" bindchangeEvent='bindInputPrice' data-target='deductionAmount'></inputNum>
+      </view>
+    </view>
+    <view class="weui-cell">
+      <text class='color666'>结算金额</text>
+      <view class="weui-cell__bd tr">
+        <inputNum class='txt-input-price' num="{{settlementAmount}}" bindchangeEvent='bindInputPrice' data-target='settlementAmount'></inputNum>
+      </view>
+    </view>
+    <view class="weui-cell">
+      <text class='color666'>业务号</text>
+      <view class="weui-cell__bd tr">
+        <input class='txt-input' type="text" placeholder="请输入业务号" value="{{businessNo}}" bindinput="bindText" data-target='businessNo' />
+      </view>
+    </view>
+    <view class="weui-cell">
+      <view class="weui-cell__bd tr">
+        <textarea class='txt-input-remark' placeholder="点我添加备注" value="{{remark}}" maxlength='200' bindinput="bindText" data-target='remark' />
+      </view>
+    </view>
+  </view>
+</scroll-view>
+<view class='weui-flex btn-wrap'>
+  <button type='defualt' wx:if="{{state=='0'}}" class="weui-flex__item cancle" bindtap='tapCancle'>
+    取消
+  </button>
+  <button type='defualt' wx:else class="weui-flex__item del" bindtap='tapDel'>
+    删除
+  </button>
+  <button type='defualt' class="weui-flex__item ok" bindtap='tapOk'>
+    确定
+  </button>
+</view>

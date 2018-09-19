@@ -1,1 +1,8 @@
-{}
+{
+  "navigationBarTitleText": "零售开单",
+  "navigationBarBackgroundColor": "#476ec9",
+  "navigationBarTextStyle": "white",
+  "usingComponents": {
+    "i-swipeout": "/component/swipeout/index"
+  }
+}

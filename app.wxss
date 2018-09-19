@@ -9,9 +9,9 @@ page {
   font-family: -apple-system-font, Helvetica Neue, Helvetica, sans-serif;
 }
 
-button[type=default]{
+button[type=default] {
   background: #fff;
-} 
+}
 
 .pt-20 {
   padding-top: 20rpx;
@@ -64,8 +64,17 @@ button[type=default]{
 .color5 {
   color: #46be8a;
 }
+
 .color6 {
   color: #e6e6e6;
+}
+
+.colore94 {
+  color: #e94f4f;
+}
+
+.color666 {
+  color: #666;
 }
 
 .on {
@@ -172,28 +181,36 @@ button[type=default]{
   background-color: rgba(71, 110, 201, 0.5) !important;
 }
 
-
 .modal-content picker {
   display: inline-block;
   border-bottom: 1rpx solid #e6e6e6;
   padding: 20rpx 30rpx;
-  margin:30rpx 0;
+  margin: 30rpx 0;
 }
 
 .modal-content picker:hover {
   border-bottom: 1rpx solid #ffaf23;
 }
 
-.placeholder{
+.placeholder {
   color: #ccc;
 }
 
+.icon-toast {
+  color: #10d0b3;
+}
+
+.icon-xiangzuo, .icon-shangyige {
+  line-height: 1;
+  font-size: 36rpx;
+}
 
 @-webkit-keyframes fadeIn {
-    from {
-          opacity: 0;
-    }
+  from {
+    opacity: 0;
+  }
 }
+
 @-webkit-keyframes fadeIn {
   from {
     opacity: 0;

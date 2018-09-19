@@ -1,0 +1,107 @@
+<wxs src="../../../filter/numberFr.wxs" module="numberFr"></wxs>
+<wux-toptips id="wux-toptips" />
+<scroll-view scroll-y='true' class="list-wrap" style="height:{{scrollHeight}}px;">
+  <view class="weui-cells weui-cells_after-title">
+    <view class="weui-cell" bindtap='tapShowDetail' data-target='operatorContactUnit'>
+      <text class='colore94'>*</text>
+      <text class='color666'>运营商往来单位</text>
+      <view class="weui-cell__bd tr">
+        {{numberFr.stringNull(contactUnitName)}}
+      </view>
+      <view class="weui-cell__ft iconfont icon-shangyige"></view>
+    </view>
+    <view class="weui-cell" bindtap='tapShowDetail' data-target='businessArchives'>
+      <text class='colore94'>*</text>
+      <text class='color666'>业务名称</text>
+      <view class="weui-cell__bd tr">
+        {{numberFr.stringNull(businessName)}}
+      </view>
+      <view class="weui-cell__ft iconfont icon-shangyige"></view>
+    </view>
+    <view class="weui-cell" bindtap='tapShowDetail' data-target='systemNo'>
+      <text class='color666'>系统工号</text>
+      <view class="weui-cell__bd tr">
+        {{numberFr.stringNull(systemNo)}}
+      </view>
+      <view class="weui-cell__ft iconfont icon-shangyige"></view>
+    </view>
+    <view class="weui-cell">
+      <text class='colore94'>*</text>
+      <text class='color666'>实际收款</text>
+      <view class="weui-cell__bd tr">
+        <inputNum class='txt-input-price' num="{{receivedAmount}}" bindchangeEvent='bindInputPrice' data-target='receivedAmount'></inputNum>
+      </view>
+    </view>
+    <view class="weui-cell">
+      <text class='colore94'>*</text>
+      <text class='color666'>数量</text>
+      <view class="weui-cell__bd tr">
+        <stepper class='fr' num="{{businessCount}}" bindchangeEvent='bindInputPrice' data-target='businessCount'></stepper>
+      </view>
+    </view>
+    <view class="weui-cell">
+      <text class='color666'>预估佣金(笔)</text>
+      <view class="weui-cell__bd tr">
+        {{numberFr.formatNum(commission,2)}}
+      </view>
+    </view>
+    <view class="weui-cell">
+      <text class='color666'>佣金金额</text>
+      <view class="weui-cell__bd tr">
+        <inputNum class='txt-input-price' num="{{commissionAmount}}" bindchangeEvent='bindInputPrice' data-target='commissionAmount'></inputNum>
+      </view>
+    </view>
+    <view class="weui-cell">
+      <text class='color666'>代办积分(笔)</text>
+      <view class="weui-cell__bd tr">
+        {{numberFr.formatNum(commissionIntegral,2)}}
+      </view>
+    </view>
+    <view class="weui-cell">
+      <text class='color666'>代办总积分</text>
+      <view class="weui-cell__bd tr">
+        <inputNum class='txt-input-price' num="{{totalCommissionIntegral}}" bindchangeEvent='bindInputPrice' data-target='totalCommissionIntegral'></inputNum>
+      </view>
+    </view>
+    <view class="weui-cell">
+      <text class='color666'>业务号</text>
+      <view class="weui-cell__bd tr">
+        <input class='txt-input' type="text" placeholder="请输入业务号" value="{{businessNo}}" bindinput="bindText" data-target='businessNo' />
+      </view>
+    </view>
+    <view class="weui-cell">
+      <text class='color666'>电话号码</text>
+      <view class="weui-cell__bd tr">
+        <input class='txt-input' type="text" placeholder="请输入电话号码" value="{{telephone}}" bindinput="bindText" data-target='telephone' />
+      </view>
+    </view>
+    <view class="weui-cell">
+      <text class='color666'>手机串号</text>
+      <view class="weui-cell__bd tr">
+        <input class='txt-input' type="text" placeholder="请输入手机串号" value="{{phoneImei}}" bindinput="bindText" data-target='phoneImei' />
+      </view>
+    </view>
+    <view class="weui-cell">
+      <text class='color666'>扣减保证金</text>
+      <view class="weui-cell__bd tr">
+        <inputNum class='txt-input-price' num="{{reductionMarginAmount}}" bindchangeEvent='bindInputPrice' data-target='reductionMarginAmount'></inputNum>
+      </view>
+    </view>
+    <view class="weui-cell">
+      <view class="weui-cell__bd tr">
+        <textarea class='txt-input-remark' placeholder="点我添加备注" value="{{remark}}" maxlength='200' bindinput="bindText" data-target='remark' />
+      </view>
+    </view>
+  </view>
+</scroll-view>
+<view class='weui-flex btn-wrap'>
+  <button type='defualt' wx:if="{{state=='0'}}" class="weui-flex__item cancle" bindtap='tapCancle'>
+    取消
+  </button>
+  <button type='defualt' wx:else class="weui-flex__item del" bindtap='tapDel'>
+    删除
+  </button>
+  <button type='defualt' class="weui-flex__item ok" bindtap='tapOk'>
+    确定
+  </button>
+</view>
