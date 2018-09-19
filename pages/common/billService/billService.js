@@ -353,6 +353,7 @@ Page({
             usedTimes,
             limitedPeriod,
             remark,
+            vipCardTypeId
           } = detailItem
           this.setData({
             lastserviceId: serviceId,
@@ -369,6 +370,7 @@ Page({
             usedTimes,
             limitedPeriod,
             remark,
+            cardTypeId:vipCardTypeId
           });
         }
       }

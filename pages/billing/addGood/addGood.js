@@ -15,12 +15,16 @@ Page({
     sectionList: [],
     customerTelephone: '',
     customerName: '',
-    totalAmount: 0,
+    totalAmount: 0,//应收金额
+    allTotalAmount: 0,//总金额
     totalSum: 0,
+    deductionAmount: 0, //抵现金额
+    loanAmount: 0, //分期贷款金额
+    depositAmount: 0, //定金金额
     goodsToggle: false,
     goodsVo: [],
     operatorToggle: false,
-    operatorDetailList: [],
+    operatorDetailList: [], //运营商业务
     addServiceToggle: false,
     addServiceDetailList: [],
     thirdPartyToggle: false,
@@ -47,7 +51,7 @@ Page({
       billsId,
     });
     if (billsId != '') {
-      this.getRetailDraftOrderVo()
+      this.getCompanyList();
     } else {
       this.getysUserInfo();
     }
@@ -59,7 +63,7 @@ Page({
    */
   onReady: function() {
     const that = this;
-    util.getScrollHeight((52 + 60 + 50 + 4)).then((scrollHeight) => {
+    util.getScrollHeightByEle(['banner-top', 'sum-wrap']).then((scrollHeight) => {
       // 计算主体部分高度,单位为px
       that.setData({
         scrollHeight,
@@ -72,10 +76,20 @@ Page({
    */
   onShow: function() {
     const {
-      goodsVo
+      goodsVo,
+      operatorDetailList,
+      addServiceDetailList,
+      thirdPartyDetailList,
+      installmentDetailList,
+      depositDetail,
     } = this.data
     let totalAmount = 0;
+    let allTotalAmount = 0;
     let totalSum = 0;
+    let deductionAmount = 0;
+    let loanAmount = 0;
+    let depositAmount = 0;
+    // 商品价格  (控制：应付金额，和总金额)
     if (Array.isArray(goodsVo)) {
       for (let i = 0; i < goodsVo.length; i++) {
         const goodsItem = goodsVo[i];
@@ -97,9 +111,54 @@ Page({
 
       }
     }
+    // 运营商业务 (控制：应付金额，和总金额)
+    if (Array.isArray(operatorDetailList)) {
+      for (let i = 0; i < operatorDetailList.length; i++) {
+        const item = operatorDetailList[i];
+        totalAmount = util.accAdd(totalAmount, item.receivedAmount)
+      }
+    }
+
+    // 增值服务 (控制：应付金额，和总金额)
+    if (Array.isArray(addServiceDetailList)) {
+      for (let i = 0; i < addServiceDetailList.length; i++) {
+        const item = addServiceDetailList[i];
+        totalAmount = util.accAdd(totalAmount, item.actualReceivedAmount)
+      }
+    }
+    allTotalAmount = totalAmount;
+    // 第三方抵扣 (控制：应付金额)
+    if (Array.isArray(thirdPartyDetailList)) {
+      for (let i = 0; i < thirdPartyDetailList.length; i++) {
+        const item = thirdPartyDetailList[i];
+        totalAmount = util.accSub(totalAmount, item.deductionAmount)
+        deductionAmount = util.accAdd(deductionAmount, item.deductionAmount)
+      }
+    }
+
+    // 分期商业务  (控制：应付金额)
+    if (Array.isArray(installmentDetailList)) {
+      for (let i = 0; i < installmentDetailList.length; i++) {
+        const item = installmentDetailList[i];
+        totalAmount = util.accAdd(util.accSub(totalAmount, item.instalmentAmount), item.downPaymentAmount)
+        loanAmount = util.accAdd(loanAmount, item.loanAmount)
+      }
+    }
+
+
+    // 定金  (控制：应付金额)
+    if (Array.isArray(depositDetail)) {
+      for (let i = 0; i < depositDetail.length; i++) {
+        const item = depositDetail[i];
+        depositAmount = util.accAdd(depositAmount, item.importDepositDetailAmount)
+      }
+    }
+
     this.setData({
       totalAmount,
       totalSum,
+      deductionAmount,
+      loanAmount,
       goodsVo,
     })
   },
@@ -313,7 +372,7 @@ Page({
     }
     this.setData({
       goodsVo,
-      addServiceDetailList:[],
+      addServiceDetailList: [],
     });
   },
   //添加赠品
@@ -697,4 +756,18 @@ Page({
       }
     })
   },
+  //业务
+  tapBusiness: function(e) {
+    const {
+      state,
+      target,
+      index
+    } = e.currentTarget.dataset;
+    var pages = getCurrentPages() //获取加载的页面
+    var currentPage = pages[pages.length - 1] //获取当前页面的对象
+
+    wx.navigateTo({
+      url: `/pages/common/${target}/${target}?route=${currentPage.route}&state=${state}&itemIndex=${index === undefined ? '-1':index}`,
+    })
+  }
 })
