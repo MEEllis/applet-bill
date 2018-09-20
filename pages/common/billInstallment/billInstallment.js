@@ -251,7 +251,7 @@ Page({
       return;
     }
 
-    if (Number(instalmentAmount) > Number(totalAmount)){
+    if (Number(instalmentAmount) > Number(totalAmount)) {
       this.showToptips({
         text: "分期金额不能大于可供分期金额！"
       })
@@ -380,12 +380,13 @@ Page({
         const {
           sectionId,
           installmentDetailList,
-          totalAmount,
+          allTotalAmount,
+          depositAmount,
         } = addPage.data;
         this.setData({
           sectionId,
           installmentDetailList,
-          totalAmount,
+          totalAmount: util.accSub(allTotalAmount, depositAmount),
         });
 
         if (state === '1' && itemIndex > -1) {

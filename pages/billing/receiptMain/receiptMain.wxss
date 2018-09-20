@@ -9,7 +9,6 @@ page {
 .title {
   font-size: 60rpx;
   text-align: center;
-  padding: 30rpx;
 }
 
 .item {
@@ -54,18 +53,26 @@ page {
   font-size: 36rpx;
 }
 
+.pay {
+  width: 720rpx;
+  height: 227rpx;
+  display: block;
+  margin: 0 auto;
+}
+
 .best_pay {
   background-color: #e25e5c !important;
   color: #fff !important;
   font-size: 36rpx;
 }
-.icon-yizhifu{
+
+.icon-yizhifu {
   font-size: 90rpx;
   height: 1px;
   width: 1px;
   position: absolute;
   top: -70rpx;
-  margin-left:-10px;
+  margin-left: -10px;
 }
 
 .icon-zhifubao1 {
@@ -78,4 +85,13 @@ page {
 
 .zflab {
   margin-left: 75rpx;
+}
+
+.btn-wrap {
+  padding: 0 30rpx;
+}
+
+.btn-wrap>.btn-item {
+  max-width: 335rpx;
+  min-width: 335rpx;
 }

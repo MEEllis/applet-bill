@@ -13,14 +13,17 @@ Page({
     sectionName: '',
     sectionId: '',
     sectionList: [],
+    contactUnitId:'',
     customerTelephone: '',
     customerName: '',
-    totalAmount: 0,//应收金额
-    allTotalAmount: 0,//总金额
     totalSum: 0,
+    totalAmount: 0, //应收金额
+    allTotalAmount: 0, //总金额
     deductionAmount: 0, //抵现金额
     loanAmount: 0, //分期贷款金额
     depositAmount: 0, //定金金额
+    ignoredAmount: 0, //抹零金额
+    integralDeductionAmount: 0, //积分抵现金额
     goodsToggle: false,
     goodsVo: [],
     operatorToggle: false,
@@ -82,6 +85,8 @@ Page({
       thirdPartyDetailList,
       installmentDetailList,
       depositDetail,
+      ignoredAmount,
+      integralDeductionAmount,
     } = this.data
     let totalAmount = 0;
     let allTotalAmount = 0;
@@ -145,7 +150,6 @@ Page({
       }
     }
 
-
     // 定金  (控制：应付金额)
     if (Array.isArray(depositDetail)) {
       for (let i = 0; i < depositDetail.length; i++) {
@@ -154,11 +158,16 @@ Page({
       }
     }
 
+    totalAmount = util.accSub(totalAmount, depositAmount) //减去定金
+    totalAmount = util.accSub(totalAmount, ignoredAmount) //减去抹零金额
+    totalAmount = util.accSub(totalAmount, integralDeductionAmount) //减去积分折扣
     this.setData({
       totalAmount,
+      allTotalAmount,
       totalSum,
       deductionAmount,
       loanAmount,
+      depositAmount,
       goodsVo,
     })
   },
@@ -189,8 +198,10 @@ Page({
       installmentDetailList,
       billsId,
       sectionId,
+      contactUnitId,
       customerTelephone,
-      totalAmount
+      totalAmount,
+      allTotalAmount,
     } = this.data;
     if (Array.isArray(goodsVo)) {
       if (goodsVo.length === 0) {
@@ -234,13 +245,15 @@ Page({
         const order = JSON.stringify({
           "billsId": billsId,
           "sectionId": sectionId,
+          "contactUnitId": contactUnitId,
           "customerId": vipVo.customerId,
           "customerName": vipVo.customerName,
           "customerTelephone": customerTelephone,
-          "ignoredAmount": 0,
-          "totalAmount": totalAmount,
+          "ignoredAmount": ignoredAmount,
+          "totalAmount": allTotalAmount,
           "totalPayAmount": totalAmount,
           "shouldReceiveAmount": totalAmount,
+          "integralDeductionAmount": integralDeductionAmount,
           "remark": "",
           "goodsDetailList": goodsDetailList,
           "paymentReceivedOrderVo": {
@@ -506,6 +519,9 @@ Page({
         addServiceDetailList,
         thirdPartyDetailList,
         installmentDetailList,
+        contactUnitId,
+        ignoredAmount,
+        integralDeductionAmount,
       } = orderVo;
       if (Array.isArray(goodsDetailList)) {
         for (let i = 0; i < goodsDetailList.length; i++) {
@@ -544,6 +560,9 @@ Page({
         addServiceDetailList,
         thirdPartyDetailList,
         installmentDetailList,
+        contactUnitId,
+        ignoredAmount,
+        integralDeductionAmount,
       });
       that.onShow();
 
@@ -758,16 +777,42 @@ Page({
   },
   //业务
   tapBusiness: function(e) {
+    this.goToBusiness(e.currentTarget.dataset)
+  },
+  tapAddSheetBusiness: function() {
+    var that = this;
+    wx.showActionSheet({
+      itemList: ['运营商业务', '增值服务', '第三方抵扣', '分期业务'],
+      success: function(res) {
+        let target = '';
+        if (res.tapIndex === 0) {
+          target = 'billOperator'
+        } else if (res.tapIndex === 1) {
+          target = 'billService'
+        } else if (res.tapIndex === 2) {
+          target = 'billThirdParty'
+        } else {
+          target = 'billInstallment'
+        }
+        that.goToBusiness({
+          state: 0,
+          target: target,
+          index: -1,
+        });
+      }
+    })
+  },
+  goToBusiness: function(data) {
     const {
       state,
       target,
       index
-    } = e.currentTarget.dataset;
+    } = data;
     var pages = getCurrentPages() //获取加载的页面
     var currentPage = pages[pages.length - 1] //获取当前页面的对象
 
     wx.navigateTo({
-      url: `/pages/common/${target}/${target}?route=${currentPage.route}&state=${state}&itemIndex=${index === undefined ? '-1':index}`,
+      url: `/pages/common/${target}/${target}?route=${currentPage.route}&state=${state}&itemIndex=${index === undefined ? '-1' : index}`,
     })
   }
 })

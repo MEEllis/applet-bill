@@ -1,11 +1,44 @@
 <wxs src="../../../filter/numberFr.wxs" module="numberFr"></wxs>
-<view class="body-wrap">
+<view class="body-wrap border-top">
   <view class="weui-flex title">
     <view class="weui-flex__item">
       {{numberFr.formatNum(totalAmount,2)}}
     </view>
   </view>
-  <!-- -->
+
+  <view class="weui-flex item  ">
+    <view class="weui-flex__item color3">
+      总金额
+    </view>
+    <view class="weui-flex__item tr ">
+      {{numberFr.formatNum(allTotalAmount,2)}}
+    </view>
+  </view>
+  <view class="weui-flex item  ">
+    <view class="weui-flex__item color3">
+      零售定金
+    </view>
+    <view class="weui-flex__item tr ">
+      {{numberFr.formatNum(depositAmount,2)}}
+    </view>
+  </view>
+  <view class="weui-flex item  ">
+    <view class="weui-flex__item color3">
+      分期贷款金额
+    </view>
+    <view class="weui-flex__item tr ">
+      {{numberFr.formatNum(loanAmount,2)}}
+    </view>
+  </view>
+  <view class="weui-flex item  border-bottom">
+    <view class="weui-flex__item color3">
+      第三方抵现金额
+    </view>
+    <view class="weui-flex__item tr ">
+      {{numberFr.formatNum(deductionAmount,2)}}
+    </view>
+  </view>
+
   <navigator url='/pages/billing/vipScore/vipScore?integralDeductionAmount={{integralDeductionAmount}}' wx:if='{{vipVo.customerId}}' class="weui-flex item border-bottom">
     <view class="weui-flex__item color3">
       积分抵现
@@ -22,7 +55,7 @@
     </view>
     <view class="weui-flex__item tr ">
 
-      <inputNum class='txt-input-ignored' num="{{ignoredAmount==0?'':ignoredAmount}}" placeholderC="0.00" bindchangeEvent='inputIgnoredAmount'></inputNum>
+      <inputNum class='txt-input-ignored' num="{{ignoredAmount==0?'0':ignoredAmount}}" placeholderC="0.00" bindchangeEvent='inputIgnoredAmount'></inputNum>
 
 
     </view>
@@ -43,18 +76,34 @@
 
   </view>
 
-  <button class="weixin mb-20 mt-30" type="default" hidden='{{!dataVo[8]}}' data-paytype='wechat' bindtap='tapScanCode'>
+  <!-- <button class="weixin mb-20 mt-30" type="default" hidden='{{!dataVo[8]}}' data-paytype='wechat' bindtap='tapScanCode'>
     <text class='iconfont icon-weixin1'></text>
     <text class='wxlab'>微信扫码收款</text>
   </button>
-  <button class="zhifubao mb-20" type="default"  hidden='{{!dataVo[8]}}' data-paytype='alipay' bindtap='tapScanCode'>
+  <button class="zhifubao mb-20" type="default" hidden='{{!dataVo[8]}}' data-paytype='alipay' bindtap='tapScanCode'>
     <text class='iconfont icon-zhifubao1'></text>
     <text class='zflab'>支付宝扫码收款</text>
   </button>
-    <button class="best_pay mb-20" type="default"  hidden='{{!dataVo[8]}}' data-paytype='best_pay' bindtap='tapScanCode'>
+  <button class="best_pay mb-20" type="default" hidden='{{!dataVo[8]}}' data-paytype='best_pay' bindtap='tapScanCode'>
     <text class='iconfont icon-yizhifu'></text>
     <text class='zflab'>翼支付扫码收款</text>
-  </button>
-  <button class="xianxia mb-20" type="default" bindtap='tapxianxia'>线下收款</button>
-  <button class="draft mb-20" type="default" bindtap='tapdraft'>仅存草稿</button>
+  </button> -->
+
+
+</view>
+
+<view hidden='{{!dataVo[8]}}'>
+  <image src="../../../images/pay.png" lazy-load='true' class='pay' data-paytype='auto_discern' bindtap='tapScanCode' />
+</view>
+
+<view class="weui-flex btn-wrap">
+  <view class="weui-flex__item btn-item">
+    <button class="xianxia mb-20" type="default" bindtap='tapxianxia'>线下收款</button>
+  </view>
+  <view class="weui-flex__item">
+   
+  </view>
+  <view class="weui-flex__item btn-item">
+    <button class="draft mb-20" type="default" bindtap='tapdraft'>仅存草稿</button>
+  </view>
 </view>

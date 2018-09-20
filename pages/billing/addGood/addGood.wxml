@@ -6,7 +6,7 @@
       <view class='iconfont icon-maishangpin'></view>
       <view class=''>卖商品</view>
     </view>
-    <view class="weui-flex__item" bindtap='tapPrevious'>
+    <view class="weui-flex__item" bindtap='tapAddSheetBusiness'>
       <view class='iconfont icon-tianjiayewu'></view>
       <view class=''>办业务</view>
     </view>

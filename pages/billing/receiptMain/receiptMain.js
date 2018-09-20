@@ -13,6 +13,10 @@ Page({
     shouldReceiveAmount: 0,
     vipCardScore: 0,
     integralDeductionAmount: 0,
+    allTotalAmount: 0,
+    depositAmount: 0,
+    loanAmount: 0,
+    deductionAmount: 0,
     remark: '',
     addPage: null,
     delta: 1,
@@ -28,14 +32,6 @@ Page({
     this.setDelta();
     this.getSectionAccountVoList()
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function() {
-
-  },
-
   /**
    * 生命周期函数--监听页面显示
    */
@@ -69,9 +65,16 @@ Page({
   // 仅存草稿
   tapdraft: function() {
     const {
-      addPage
+      addPage,
+      ignoredAmount,
+      integralDeductionAmount,
     } = this.data;
     if (addPage) {
+      addPage.setData({
+        ignoredAmount,
+        integralDeductionAmount,
+      })
+      addPage.onShow()
       addPage.tapSaveDraft();
     }
   },
@@ -118,7 +121,7 @@ Page({
               amount: util.accMul(totalPayAmount, 100),
             },
             dataVo: {
-              8:[itemVo]
+              8: [itemVo]
             }
           }
           bill.saveAndPostDraftRetailVo(saveData).then((res) => {
@@ -188,10 +191,29 @@ Page({
       addPage: mainPage.addPage,
     });
     if (addPage != null) {
+
+
+      const {
+        sectionId,
+        totalAmount,
+        ignoredAmount,
+        integralDeductionAmount,
+        allTotalAmount,
+        depositAmount,
+        loanAmount,
+        deductionAmount,
+        vipVo,
+      } = addPage.data
       this.setData({
-        sectionId: addPage.data.sectionId,
-        totalAmount: addPage.data.totalAmount,
-        vipVo: addPage.data.vipVo,
+        sectionId,
+        totalAmount,
+        ignoredAmount,
+        integralDeductionAmount,
+        allTotalAmount,
+        depositAmount,
+        loanAmount,
+        deductionAmount,
+        vipVo,
       });
     }
   }
