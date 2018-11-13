@@ -56,27 +56,28 @@ Page({
       state,
       itemIndex,
     });
+
+    this.setDelta();
+    this.getOperatorContactUnitVoList();
     let barTitle = '添加运营商业务'
     if (state !== '0') {
       barTitle = '修改运营商业务'
+      this.getBusinessArchivesVoList();
+      this.getSystemNoVoList();
     }
     wx.setNavigationBarTitle({
       title: barTitle,
     })
-    this.setDelta();
-    this.getOperatorContactUnitVoList();
-    this.getBusinessArchivesVoList();
-    this.getSystemNoVoList();
   },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function() {
     const that = this;
-    util.getScrollHeightByEle(['btn-wrap']).then((scrollHeight) => {
+    util.getScrollHeightByEle(['btn-wrap'],true).then((scrollHeight) => {
       // 计算主体部分高度,单位为px
       that.setData({
-        scrollHeight,
+        scrollHeight: scrollHeight - 1,
       })
     })
   },
@@ -161,6 +162,10 @@ Page({
       this.setData(setObj)
       if (target === 'businessCount') {
         this.sumPrice()
+      } else if (target === 'receivedAmount') {
+        this.setData({
+          'reductionMarginAmount': num,
+        })
       }
     }
   },

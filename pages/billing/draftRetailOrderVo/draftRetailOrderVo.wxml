@@ -32,7 +32,7 @@
   <scroll-view scroll-y='true' class="list-wrap" style="height:{{scrollHeight}}px;" bindscrolltolower='scrolltolower'>
     <view class='good-item' wx:for-items="{{dataList}}" wx:for-index="idx" wx:key="*this">
       <view class='good-item-wrap' style="{{item.txtStyle}}" bindtouchstart="touchS" bindtouchmove="touchM" bindtouchend="touchE" data-index="{{idx}}">
-        <navigator class='list-item mb-20' url="/pages/billing/newBilling/newBilling?billsId={{item.billsId}}" data-index="{{index}}">
+        <navigator class='list-item mb-20' url="/pages/billing/addGood/addGood?billsId={{item.billsId}}" data-index="{{index}}">
           <view class='list-item-title'>
             <view class='weui-flex'>
               <view class="weui-flex__item tl">

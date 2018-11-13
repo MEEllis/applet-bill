@@ -17,13 +17,19 @@ Page({
     addPage: null,
     receiptMainPage: null,
     dataVo: null,
+    scrollHeight: 0,
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
-    let { totalPayAmount, ignoredAmount, integralDeductionAmount, totalAmount } = options;
+  onLoad: function(options) {
+    let {
+      totalPayAmount,
+      ignoredAmount,
+      integralDeductionAmount,
+      totalAmount
+    } = options;
     totalPayAmount = totalPayAmount === undefined ? 0 : totalPayAmount;
     ignoredAmount = ignoredAmount === undefined ? 0 : ignoredAmount;
     integralDeductionAmount = integralDeductionAmount === undefined ? 0 : integralDeductionAmount;
@@ -38,12 +44,31 @@ Page({
     });
     this.setDelta();
     this.getSectionAccountVoList();
-   
+
   },
 
-  inputAmount: function (e) {
-    const { key, index } = e.currentTarget.dataset;
-    const { dataVo, totalPayAmount } = this.data;
+  /**
+   * 生命周期函数--监听页面初次渲染完成
+   */
+  onReady: function() {
+    const that = this;
+    util.getScrollHeightByEle(['btnBlue', 'bottom-wrap', 'top-wrap']).then((scrollHeight) => {
+      // 计算主体部分高度,单位为px
+      that.setData({
+        scrollHeight: scrollHeight - 1,
+      })
+    })
+  },
+
+  inputAmount: function(e) {
+    const {
+      key,
+      index
+    } = e.currentTarget.dataset;
+    const {
+      dataVo,
+      totalPayAmount
+    } = this.data;
     const amount = e.detail.num;
 
     if (dataVo != null) {
@@ -65,14 +90,19 @@ Page({
       });
     }
   },
-  getSectionAccountVoList: function () {
-    const { sectionId } = this.data;
+  getSectionAccountVoList: function() {
+    const {
+      sectionId
+    } = this.data;
     const that = this;
     util.request(
-      api.getSectionAccountVoList,
-      { sectionId},
+      api.getSectionAccountVoList, {
+        sectionId
+      },
     ).then(res => {
-      const { dataList } = res.data;
+      const {
+        dataList
+      } = res.data;
       const returnObj = {};
       if (Array.isArray(dataList)) {
         for (let i = 0; i < dataList.length; i++) {
@@ -91,10 +121,16 @@ Page({
       })
     })
   },
-  setDelta: function () {
-    const mainPage = util.getMainPage({ route: 'pages/billing/addGood/addGood' })
-    const receiptMainPage = util.getMainPage({ route: 'pages/billing/receiptMain/receiptMain' })
-    const { addPage } = mainPage;
+  setDelta: function() {
+    const mainPage = util.getMainPage({
+      route: 'pages/billing/addGood/addGood'
+    })
+    const receiptMainPage = util.getMainPage({
+      route: 'pages/billing/receiptMain/receiptMain'
+    })
+    const {
+      addPage
+    } = mainPage;
     this.setData({
       delta: mainPage.delta,
       addPage: addPage,
@@ -110,11 +146,22 @@ Page({
       });
     }
   },
-  tapOk: function () {
-    const { sectionId, addPage, receiptMainPage, ignoredAmount, totalAmount, totalPayAmount, dataVo, integralDeductionAmount} = this.data;
+  tapOk: function() {
+    const {
+      sectionId,
+      addPage,
+      receiptMainPage,
+      ignoredAmount,
+      totalAmount,
+      totalPayAmount,
+      dataVo,
+      integralDeductionAmount
+    } = this.data;
 
     if (addPage != null && receiptMainPage != null) {
-      const { remark } = receiptMainPage.data;
+      const {
+        remark
+      } = receiptMainPage.data;
       const saveData = {
         sectionId,
         ignoredAmount,
@@ -130,8 +177,7 @@ Page({
           url: `/pages/billing/paySuccess/paySuccess?totalPayAmount=${totalPayAmount}&billsId=${res.data.billsId}`
         });
       })
-    }
-    else {
+    } else {
       util.showErrorToast('操作有误！')
     }
   }

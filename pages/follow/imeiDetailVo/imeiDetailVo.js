@@ -9,14 +9,17 @@ Page({
   data: {
     queryKey: '',
     imeiId: '',
-    imeiVo:{}
+    imeiVo: {}
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
-    const { queryKey, imeiId } = options;
+  onLoad: function(options) {
+    const {
+      queryKey,
+      imeiId
+    } = options;
     if (queryKey !== undefined) {
       this.setData({
         queryKey,
@@ -34,21 +37,24 @@ Page({
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () {
+  onReady: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
+  onShow: function() {
 
   },
 
   // 获取商品明细
-  getDetailImeiVo: function () {
+  getDetailImeiVo: function() {
     const _this = this;
-    const { imeiId, queryKey } = this.data;
+    const {
+      imeiId,
+      queryKey
+    } = this.data;
     util.request(api.getDetailImeiVo, {
       imeiId,
       queryKey,
@@ -58,4 +64,10 @@ Page({
       });
     });
   },
+  /**
+   * 用户点击右上角分享
+   */
+  onShareAppMessage: function() {
+
+  }
 })

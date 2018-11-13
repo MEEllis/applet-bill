@@ -41,11 +41,11 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+  onLoad: function(options) {
     var that = this;
     this.thridModal = this.selectComponent("#thridModal");
     wx.getSystemInfo({
-      success: function (res) {
+      success: function(res) {
         that.setData({
           sliderLeft: (res.windowWidth / that.data.tabs.length - sliderWidth) / 2,
           sliderOffset: res.windowWidth / that.data.tabs.length * that.data.activeIndex
@@ -70,10 +70,10 @@ Page({
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () {
+  onReady: function() {
     var that = this;
 
-    util.getScrollHeight([50 + 54 , 50 + 54 + 35 + 10]).then((scrollHeight) => {
+    util.getScrollHeight([50 + 54, 50 + 54 + 35 + 10]).then((scrollHeight) => {
       // 计算主体部分高度,单位为px
       that.setData({
         scrollHeightTab1: scrollHeight[0],
@@ -83,9 +83,9 @@ Page({
     })
   },
   /**
-* 生命周期函数--监听页面显示
-*/
-  onShow: function () {
+   * 生命周期函数--监听页面显示
+   */
+  onShow: function() {
     var pages = getCurrentPages()
     if (appInstance.globalData.isChangeCompany === true) {
       appInstance.globalData.isChangeCompany = false;
@@ -94,28 +94,35 @@ Page({
       })
     }
   },
-  tabClick: function (e) {
+  tabClick: function(e) {
     this.thridModal.hide();
     this.setData({
       sliderOffset: e.currentTarget.offsetLeft,
       activeIndex: e.currentTarget.id
     });
   },
-  bindShrink: function (e) {
+  bindShrink: function(e) {
     this.setData({
       isShrink: !this.data.isShrink
     })
   },
   // 我的排行  排序
-  bindSort: function (e) {
-    const { sign, sort } = e.currentTarget.dataset;
+  bindSort: function(e) {
+    const {
+      sign,
+      sort
+    } = e.currentTarget.dataset;
     const ranking = {}
     ranking[sign] = Number(sort);
     this.setData(ranking)
   },
-  bindReceiptsDate: function (e) {
-    const { curDayDate } = this.data;
-    const { sign } = e.currentTarget.dataset;
+  bindReceiptsDate: function(e) {
+    const {
+      curDayDate
+    } = this.data;
+    const {
+      sign
+    } = e.currentTarget.dataset;
     const curDate = new Date(curDayDate);
     let newDayDate;
     if (sign === 'next') {
@@ -134,7 +141,7 @@ Page({
     this.getMyReceiptsStatistics();
   },
   //我的销量 ： 点击今日-明日等
-  tabContent2Click: function (e) {
+  tabContent2Click: function(e) {
     let startTime, endTime;
     const index = e.currentTarget.dataset.index;
     const tab = e.currentTarget.dataset.tab;
@@ -197,25 +204,29 @@ Page({
 
 
   },
-  bindCurDate: function (e) {
+  bindCurDate: function(e) {
     this.setData({
       curDayDate: e.detail.value
     })
     this.getMyReceiptsStatistics();
   },
-  bindDateStart: function (e) {
+  bindDateStart: function(e) {
     this.setData({
       modalConfirmStartTime: e.detail.value
     })
   },
-  bindDateEnd: function (e) {
+  bindDateEnd: function(e) {
     this.setData({
       modalConfirmEndTime: e.detail.value
     })
   },
-  modalConfirm: function (e) {
+  modalConfirm: function(e) {
 
-    const { activeIndex, modalConfirmStartTime, modalConfirmEndTime } = this.data;
+    const {
+      activeIndex,
+      modalConfirmStartTime,
+      modalConfirmEndTime
+    } = this.data;
 
     if (activeIndex == 1) {
       this.setData({
@@ -233,14 +244,17 @@ Page({
     this.thridModal.hide();
   },
   // 获取销量明细信息
-  getMySalesStatistics: function () {
+  getMySalesStatistics: function() {
     const _this = this;
-    const { startTime2, endTime2 } = this.data;
+    const {
+      startTime2,
+      endTime2
+    } = this.data;
 
     util.request(api.getMySalesStatistics, {
-      startTime: startTime2,
-      endTime: endTime2,
-    },
+        startTime: startTime2,
+        endTime: endTime2,
+      },
       'GET'
     ).then(res => {
       let tabContentObj2 = res.data;
@@ -263,14 +277,16 @@ Page({
     });
   },
   // 获取营业款明细信息
-  getMyReceiptsStatistics: function () {
+  getMyReceiptsStatistics: function() {
     const _this = this;
-    const { curDayDate } = this.data;
+    const {
+      curDayDate
+    } = this.data;
 
     util.request(api.getMyReceiptsStatistics, {
-      startTime: curDayDate,
-      endTime: curDayDate,
-    },
+        startTime: curDayDate,
+        endTime: curDayDate,
+      },
       'GET'
     ).then(res => {
       let receiptsVo = res.data.receiptsVo;
@@ -280,14 +296,17 @@ Page({
     });
   },
   // 获取营业款明细信息
-  getMyRankingStatistics: function () {
+  getMyRankingStatistics: function() {
     const _this = this;
-    const { startTime3, endTime3 } = this.data;
+    const {
+      startTime3,
+      endTime3
+    } = this.data;
 
     util.request(api.getMyRankingStatistics, {
-      startTime: startTime3,
-      endTime: endTime3,
-    },
+        startTime: startTime3,
+        endTime: endTime3,
+      },
       'GET'
     ).then(res => {
       const tabContentObj3 = res.data;
@@ -296,4 +315,10 @@ Page({
       });
     });
   },
+  /**
+   * 用户点击右上角分享
+   */
+  onShareAppMessage: function() {
+
+  }
 })

@@ -88,9 +88,9 @@
       </view>
     </view>
 
-    <button class="ok mb-20" type="primary" bindtap='tapOk'>确定</button>
+    <button class="ok mb-20" type="default" bindtap='tapOk'>确定</button>
     <button wx:if="{{isSee!=1}}"class="cancle mb-20" type="default" bindtap='tapCancle'>取消</button>
-    <button wx:else class="del mb-20" type="primary" bindtap='tapDel'>删除</button>
+    <button wx:else class="del mb-20" type="default" bindtap='tapDel'>删除</button>
   </view>
 
 

@@ -62,26 +62,27 @@ Page({
       state,
       itemIndex,
     });
+
+    this.setDelta();
+    this.getInstallmentContactUnitVoList();
     let barTitle = '添加分期业务'
     if (state !== '0') {
       barTitle = '修改分期业务'
+      this.getInstallmentVoList()
     }
     wx.setNavigationBarTitle({
       title: barTitle,
     })
-    this.setDelta();
-    this.getInstallmentContactUnitVoList();
-
   },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function() {
     const that = this;
-    util.getScrollHeightByEle(['btn-wrap']).then((scrollHeight) => {
+    util.getScrollHeightByEle(['btn-wrap'], true).then((scrollHeight) => {
       // 计算主体部分高度,单位为px
       that.setData({
-        scrollHeight,
+        scrollHeight: scrollHeight - 1,
       })
     })
   },
@@ -150,10 +151,52 @@ Page({
       const setObj = {}
       setObj[target] = num
       this.setData(setObj)
-      this.sumPrice()
+      //分期金额 或者 首付金额
+      if (target == 'instalmentAmount' || target=='downPaymentAmount') {
+        setTimeout(()=>{
+          this.sumPrice()
+        },20)
+      }
+      //分期数
+      else if (target == 'installmentCount') {
+        /*
+        更改“分期数”:
+         月供 = 分期贷款金额 ÷ 分期数
+        */
+        const {
+          loanAmount,
+        } = this.data;
+        const monthlyPayAmount = Number(util.accDiv(loanAmount, num)).toFixed(2)
+        this.setData({
+          monthlyPayAmount,
+        })
+      }
+      //手续费金额
+      else if (target == 'procedureFeeAmount') {
+        /*
+       更改“手续费金额”
+       扣费后贷款金额 = 分期贷款金额 - 手续费金额
+        */
+        const {
+          loanAmount,
+        } = this.data;
+        const excludeProcedureFeeLoanAmount = Number(util.accSub(loanAmount, num)).toFixed(2)
+        this.setData({
+          excludeProcedureFeeLoanAmount,
+        })
+      }
+    
     }
   },
   sumPrice: function() {
+    /*
+    更改“分期金额” 或者更改 ‘首付金额’:
+    分期贷款金额 = 分期金额 - 首付金额
+    预计佣金 = 分期贷款金额 * 佣金比例
+    手续费金额 = 分期贷款金额 * 手续费比例
+    扣费后贷款金额 = 分期贷款金额 - 手续费金额
+     月供 = 分期贷款金额 ÷ 分期数
+     */
     const {
       instalmentAmount, //  分期金额
       downPaymentAmount, //  首付金额
@@ -338,7 +381,7 @@ Page({
       installmentId,
     } = this.data;
     const postData = {
-      installmentId,
+      contactUnitId: installmentId,
     };
     util.request(api.getInstallmentVoList, postData).then(res => {
       that.setData({

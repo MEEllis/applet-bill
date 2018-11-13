@@ -9,9 +9,9 @@ Page({
     billsId: '',
     remark: '',
     orderVo: {},
-    totalCount:0,
+    totalCount: 0,
     goodOn: true,
-    operatorOn: true ,
+    operatorOn: true,
     addedServicesOn: true,
     thirdPartyOn: true,
     installmentOn: true,
@@ -21,7 +21,7 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+  onLoad: function(options) {
     const billsId = options.billsId;
     this.setData({
       billsId
@@ -29,7 +29,7 @@ Page({
     this.getDetail();
   },
   //拨打手机号
-  tapTel: function (e) {
+  tapTel: function(e) {
     const tel = e.currentTarget.dataset.tel
     wx.makePhoneCall({
       phoneNumber: tel
@@ -37,14 +37,16 @@ Page({
   },
 
   // 获取明细
-  getDetail: function () {
+  getDetail: function() {
     const _this = this;
-    const { billsId } = this.data;
+    const {
+      billsId
+    } = this.data;
     util.request(api.getRetailRefundOrderVo, {
       billsId,
     }, 'GET').then(res => {
-      let totalCount=0;
-      for (let i = 0; i < res.data.orderVo.goodsDetailList.length;i++){
+      let totalCount = 0;
+      for (let i = 0; i < res.data.orderVo.goodsDetailList.length; i++) {
         totalCount += Number(res.data.orderVo.goodsDetailList[i].goodsCount)
       }
 
@@ -56,19 +58,19 @@ Page({
     });
   },
   //tap的显示/隐藏
-  tapList: function (e) {
+  tapList: function(e) {
     const target = e.currentTarget.dataset.target
     const flagOn = this.data[target];
     const setObj = {}
     setObj[target] = !flagOn
     this.setData(setObj);
   },
-  inputRemark: function (e) {
+  inputRemark: function(e) {
     this.setData({
       remark: e.detail.value,
     });
   },
-  tapUpdate: function (e) {
+  tapUpdate: function(e) {
     const {
       billsId,
       remark,
@@ -80,7 +82,7 @@ Page({
       util.showErrorToast('修改成功！')
     });
   },
-  tapPrint: function (e) {
+  tapPrint: function(e) {
     const {
       billsId,
       orderVo,
@@ -89,4 +91,10 @@ Page({
       url: `/pages/billing/paySuccess/paySuccess?totalPayAmount=${orderVo.totalAmount}&billsId=${billsId}`
     });
   },
+  /**
+   * 用户点击右上角分享
+   */
+  onShareAppMessage: function() {
+
+  }
 })

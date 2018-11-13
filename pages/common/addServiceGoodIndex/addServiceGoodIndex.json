@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "增值服务名称",
+  "navigationBarTitleText": "请选此单商品",
   "usingComponents": {
     "search-bar": "/component/search-bar/index"
   }

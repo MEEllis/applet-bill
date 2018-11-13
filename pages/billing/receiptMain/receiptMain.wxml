@@ -39,12 +39,12 @@
     </view>
   </view>
 
-  <navigator url='/pages/billing/vipScore/vipScore?integralDeductionAmount={{integralDeductionAmount}}' wx:if='{{vipVo.customerId}}' class="weui-flex item border-bottom">
+  <navigator url='/pages/billing/vipScore/vipScore?integralDeductionAmount={{integralDeductionAmount}}' wx:if='{{vipVo.customerId && vipVo.status===0 }}' class="weui-flex item border-bottom">
     <view class="weui-flex__item color3">
       积分抵现
     </view>
     <view class="weui-flex__item tr">
-      <text wx:if="{{integralDeductionAmount==0}}">共{{vipVo.vipCardScore}}可抵 {{numberFr.formatNum(vipVo.vipCardScore/vipVo.deductionIntegral*vipVo.deductionAmount,2)}}元</text>
+      <text wx:if="{{integralDeductionAmount==0}}">共 {{numberFr.formatNum(vipVo.vipCardScore||0)}}可抵 {{numberFr.formatNum(((vipVo.vipCardScore||0)/vipVo.deductionIntegral*vipVo.deductionAmount)||0,2)}}元</text>
       <text wx:else>{{integralDeductionAmount}}</text>
       <text class='iconfont icon-shangyige'></text>
     </view>
@@ -98,12 +98,26 @@
 
 <view class="weui-flex btn-wrap">
   <view class="weui-flex__item btn-item">
-    <button class="xianxia mb-20" type="default" bindtap='tapxianxia'>线下收款</button>
+    <button class=" mb-20 cancle" type="default" bindtap='tapxianxia'>线下收款</button>
   </view>
   <view class="weui-flex__item">
-   
+
   </view>
   <view class="weui-flex__item btn-item">
-    <button class="draft mb-20" type="default" bindtap='tapdraft'>仅存草稿</button>
+    <button class=" mb-20 cancle" type="default" bindtap='tapdraft'>仅存草稿</button>
+  </view>
+</view>
+
+<view class='cover_layer' hidden='{{isCover}}'>
+  <view class='cover_con'>
+    <view style='font-size:40rpx;font-weight:700;'>
+      收款中...
+    </view>
+    <view>
+      请不要后退或关闭当前页面，
+    </view>
+    <view>
+      请耐心等待并协助顾客输入密码或完成支付认证操作
+    </view>
   </view>
 </view>

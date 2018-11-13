@@ -8,7 +8,7 @@
         {{numberFr.formatNum(totalAmount,2)}}
       </view>
     </view>
-    <view class="weui-cell" bindtap='tapShowDetail' data-target='installmentName'>
+    <view class="weui-cell active-1" bindtap='tapShowDetail' data-target='installmentName'>
       <text class='colore94'>*</text>
       <text class='color666'>分期商名称</text>
       <view class="weui-cell__bd tr">
@@ -16,7 +16,7 @@
       </view>
       <view class="weui-cell__ft iconfont icon-shangyige"></view>
     </view>
-    <view class="weui-cell" bindtap='tapShowDetail' data-target='businessName'>
+    <view class="weui-cell active-1" bindtap='tapShowDetail' data-target='businessName'>
       <text class='colore94'>*</text>
       <text class='color666'>业务名称</text>
       <view class="weui-cell__bd tr">
@@ -25,18 +25,19 @@
       <view class="weui-cell__ft iconfont icon-shangyige"></view>
     </view>
 
-    <view class="weui-cell">
-      <text class='colore94'>*</text>
-      <text class='color666'>分期金额</text>
-      <view class="weui-cell__bd tr">
-        <inputNum class='txt-input-price' num="{{instalmentAmount}}" bindchangeEvent='bindInputPrice' data-target='instalmentAmount'></inputNum>
-      </view>
-    </view>
+
     <view class="weui-cell">
       <text class='colore94'>*</text>
       <text class='color666'>首付金额</text>
       <view class="weui-cell__bd tr">
         <inputNum class='txt-input-price' num="{{downPaymentAmount}}" bindchangeEvent='bindInputPrice' data-target='downPaymentAmount'></inputNum>
+      </view>
+    </view>
+    <view class="weui-cell">
+      <text class='colore94'>*</text>
+      <text class='color666'>分期金额</text>
+      <view class="weui-cell__bd tr">
+        <inputNum class='txt-input-price' num="{{instalmentAmount}}" bindchangeEvent='bindInputPrice' data-target='instalmentAmount'></inputNum>
       </view>
     </view>
     <view class="weui-cell">
@@ -104,7 +105,7 @@
     </view>
     <view class="weui-cell">
       <view class="weui-cell__bd tr">
-        <textarea class='txt-input-remark' placeholder="点我添加备注" value="{{remark}}" maxlength='200' bindinput="bindText" data-target='remark' />
+        <input class='txt-input-remark' type="text" placeholder="点我添加备注" value="{{remark}}" maxlength='200' bindinput="bindText" data-target='remark' />
       </view>
     </view>
   </view>

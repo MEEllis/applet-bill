@@ -1,6 +1,6 @@
 <view class="container">
   <wxs src="../../../filter/numberFr.wxs" module="numberFr"></wxs>
-  <view class='list-item' hidden='{{!goodsVo.dataId}}'>
+  <view class="list-item  " hidden='{{!goodsVo.dataId}}'>
     <view class='weui-flex ellipsis2 title'>
       {{goodsVo.name}}
     </view>

@@ -2,7 +2,7 @@
 <wux-toptips id="wux-toptips" />
 <scroll-view scroll-y='true' class="list-wrap" style="height:{{scrollHeight}}px;">
   <view class="weui-cells weui-cells_after-title">
-    <view class="weui-cell" bindtap='tapShowDetail' data-target='operatorContactUnit'>
+    <view class="weui-cell active-1" bindtap='tapShowDetail' data-target='operatorContactUnit'>
       <text class='colore94'>*</text>
       <text class='color666'>运营商往来单位</text>
       <view class="weui-cell__bd tr">
@@ -10,7 +10,7 @@
       </view>
       <view class="weui-cell__ft iconfont icon-shangyige"></view>
     </view>
-    <view class="weui-cell" bindtap='tapShowDetail' data-target='businessArchives'>
+    <view class="weui-cell active-1" bindtap='tapShowDetail' data-target='businessArchives'>
       <text class='colore94'>*</text>
       <text class='color666'>业务名称</text>
       <view class="weui-cell__bd tr">
@@ -18,7 +18,7 @@
       </view>
       <view class="weui-cell__ft iconfont icon-shangyige"></view>
     </view>
-    <view class="weui-cell" bindtap='tapShowDetail' data-target='systemNo'>
+    <view class="weui-cell active-1" bindtap='tapShowDetail' data-target='systemNo'>
       <text class='color666'>系统工号</text>
       <view class="weui-cell__bd tr">
         {{numberFr.stringNull(systemNo)}}
@@ -30,6 +30,12 @@
       <text class='color666'>实际收款</text>
       <view class="weui-cell__bd tr">
         <inputNum class='txt-input-price' num="{{receivedAmount}}" bindchangeEvent='bindInputPrice' data-target='receivedAmount'></inputNum>
+      </view>
+    </view>
+    <view class="weui-cell">
+      <text class='color666'>扣减保证金</text>
+      <view class="weui-cell__bd tr">
+        <inputNum class='txt-input-price' num="{{reductionMarginAmount}}" bindchangeEvent='bindInputPrice' data-target='reductionMarginAmount'></inputNum>
       </view>
     </view>
     <view class="weui-cell">
@@ -81,15 +87,10 @@
         <input class='txt-input' type="text" placeholder="请输入手机串号" value="{{phoneImei}}" bindinput="bindText" data-target='phoneImei' />
       </view>
     </view>
-    <view class="weui-cell">
-      <text class='color666'>扣减保证金</text>
-      <view class="weui-cell__bd tr">
-        <inputNum class='txt-input-price' num="{{reductionMarginAmount}}" bindchangeEvent='bindInputPrice' data-target='reductionMarginAmount'></inputNum>
-      </view>
-    </view>
+
     <view class="weui-cell">
       <view class="weui-cell__bd tr">
-        <textarea class='txt-input-remark' placeholder="点我添加备注" value="{{remark}}" maxlength='200' bindinput="bindText" data-target='remark' />
+        <input class='txt-input-remark' type="text" placeholder="点我添加备注" value="{{remark}}" maxlength='200' bindinput="bindText" data-target='remark' />
       </view>
     </view>
   </view>

@@ -26,7 +26,7 @@
  
   </navigator>
 
-  <view class="weui-tab mt-20" hidden='{{!goodsVo.dataId}}'>
+  <view class="weui-tab " style='margin-top:10px;' hidden='{{!goodsVo.dataId}}'>
     <view class="weui-navbar">
       <block wx:for="{{tabs}}" wx:key="*this">
         <view id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">

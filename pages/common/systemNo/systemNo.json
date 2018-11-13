@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "资金账户类型",
+  "navigationBarTitleText": "运营商系统工号",
   "usingComponents": {
     "search-bar": "/component/search-bar/index"
   }

@@ -680,7 +680,7 @@
       </view>
     </view>
   </view>
-
+  <view></view>
   <view class="fixed-bottom">
     <view class="weui-flex sum-wrap">
 

@@ -2,52 +2,48 @@
 <view class="container">
   <!-- 菜单 -->
   <view class="weui-flex banner-top">
-    <view class="weui-flex__item" bindtap='tapAddSheet'>
+    <view class="weui-flex__item active-2" bindtap='tapAddSheet'>
       <view class='iconfont icon-maishangpin'></view>
       <view class=''>卖商品</view>
     </view>
-    <view class="weui-flex__item" bindtap='tapAddSheetBusiness'>
+    <view class="weui-flex__item active-2" bindtap='tapAddSheetBusiness'>
       <view class='iconfont icon-tianjiayewu'></view>
       <view class=''>办业务</view>
     </view>
-    <!-- <view class="weui-flex__item" bindtap='tapPrevious'>
-      <view class='iconfont icon-shangyibu'></view>
-      <view class=''>上一步</view>
-    </view> -->
     <view class="weui-flex__item ">
     </view>
-    <view class="weui-flex__item " bindtap='tapDelDraft'>
+    <view class="weui-flex__item active-2" bindtap='tapDelDraft'>
       <view hidden='{{billsId==""}}'>
         <view class='iconfont icon-delete'></view>
         <view class=''>删除本单</view>
       </view>
     </view>
 
-    <view class="weui-flex__item" bindtap='tapSaveDraft'>
+    <view class="weui-flex__item active-2" bindtap='tapSaveDraft'>
       <view class='iconfont icon-baocuncaogaodan1'></view>
       <view class=''>存草稿</view>
     </view>
 
-    <view class="weui-flex__item " bindtap='tapNewDraft'>
+    <view class="weui-flex__item active-2" bindtap='tapNewDraft'>
       <view class='iconfont icon-xinkaidan'></view>
       <view class=''>新开单</view>
     </view>
   </view>
+
   <!-- 单据详情 -->
   <scroll-view scroll-y='true' style="height:{{scrollHeight}}px;" class='good-list'>
     <!-- 会员信息 -->
     <view class='vipVo-wrap'>
-      <view class="weui-cells weui-cells_after-title">
-        <view class="weui-cell">
+      <view class="weui-cells userinfo weui-cells_after-title">
+        <view class="weui-cell active-1">
           <view class="weui-cell__hd">
-            <text class='iconfont icon-mendian'></text>
+            <text class='iconfont icon-bumen1'></text>
           </view>
           <picker range-key="name" class="weui-cell__bd ellipsis" bindchange="bindPickerChange" value="{{sectionIndex}}" range="{{sectionList}}">
             <view class="picker">
               {{sectionName}}
             </view>
           </picker>
-
           <view class="weui-cell__ft iconfont icon-shangyige"></view>
         </view>
         <view class="weui-cell ">
@@ -55,7 +51,7 @@
             <text class='iconfont icon-iconcustomer'></text>
           </view>
           <view class="weui-cell__bd">客户信息</view>
-          <view wx:if='{{vipVo!==null&&customerTelephone.length===11}}' class="weui-cell__ft desc">
+          <view wx:if='{{vipVo.vipCardScore!==undefined&&customerTelephone.length===11}}' class="weui-cell__ft desc">
             <text wx:if='{{vipVo.status==1}}'>该会员已禁用,不享有相应会员类型服务</text>
             <text class='color1' wx:else hidden='{{discountRate==10}}'>该会员享受部分商品{{discountRate}}折优惠</text>
           </view>
@@ -66,26 +62,26 @@
           <view class="weui-flex">
             <text class='color3'>客户电话:</text>
             <view class=" weui-flex__item">
-              <input class='txt-input' type="number" placeholder-class='placeholder' focus placeholder="请输入(客户或会员)手机号码" value="{{customerTelephone}}" bindinput="inputTel" maxlength='11' />
+              <input class='txt-input' type="number" placeholder-class='placeholder' placeholder="请输入(客户或会员)手机号码" value="{{customerTelephone}}" bindinput="inputTel" maxlength='11' />
             </view>
           </view>
           <view hidden='{{customerTelephone.length!==11}}' class="weui-flex">
             <text class='color3'>客户姓名:</text>
             <view class=" weui-flex__item">
-              <text wx:if='{{vipVo!==null&&customerTelephone.length===11}}'>{{numberFr.stringNull(vipVo.customerName)}}</text>
-              <input class='txt-input' wx:else bindinput="inputName" placeholder-class='placeholder' focus="true" placeholder="请输入客户姓名" value="{{customerName}}" />
+              <text wx:if='{{vipVo.vipCardScore!==undefined&&customerTelephone.length===11}}'>{{numberFr.stringNull(vipVo.customerName)}}</text>
+              <input class='txt-input' wx:else bindinput="inputName" placeholder-class='placeholder' placeholder="请输入客户姓名" value="{{customerName}}" />
             </view>
           </view>
-          <view wx:if='{{vipVo!==null&&customerTelephone.length===11}}' class="weui-flex">
+          <view wx:if='{{vipVo.vipCardScore!==undefined&&customerTelephone.length===11}}' class="weui-flex">
             <text class='color3'>会员类型:</text>
             <view class=" weui-flex__item">
               {{numberFr.stringNull(vipVo.vipCardTypeName)}}
             </view>
           </view>
-          <view wx:if='{{vipVo!==null&&customerTelephone.length===11}}' class="weui-flex jf">
+          <view wx:if='{{vipVo.vipCardScore!==undefined&&customerTelephone.length===11}}' class="weui-flex jf">
             <text class='color3'>会员积分:</text>
             <view class=" weui-flex__item">
-              {{numberFr.formatNum(vipVo.vipCardScore)}}
+              {{numberFr.formatNum(vipVo.vipCardScore||0)}}
             </view>
           </view>
         </view>
@@ -93,17 +89,17 @@
     </view>
     <!-- 商品信息 -->
     <view class='good-wrap'>
-      <view class="weui-flex tap" data-target="good">
+      <view class="weui-flex tap " data-target="good">
         <view class="weui-cell__bd">商品</view>
-        <view class="weui-flex__item add-wrap" bindtap='tapScanCode'>
+        <view class="weui-flex__item add-wrap active-1" bindtap='tapScanCode'>
           <text class='iconfont icon-saoyisao'></text>
           <view class=''>扫串号/条码</view>
         </view>
-        <view class="weui-flex__item add-wrap" bindtap='tapLuru'>
+        <view class="weui-flex__item add-wrap active-1" bindtap='tapLuru'>
           <text class='iconfont icon-luruchuanhao'></text>
           <view class=''>录串号</view>
         </view>
-        <view class="weui-flex__item add-wrap" bindtap='tapSelGood'>
+        <view class="weui-flex__item add-wrap active-1" bindtap='tapSelGood'>
           <text class='iconfont icon-sousuoxuanshangpin'></text>
           <view class=''>选商品</view>
         </view>
@@ -203,9 +199,9 @@
     </view>
     <!-- 运营商业务 -->
     <view class='operator-wrap'>
-      <view class="weui-flex tap">
+      <view class="weui-flex tap active-1" data-target="billOperator" data-state="0" bindtap='tapBusiness'>
         <view class="weui-cell__bd">运营商业务</view>
-        <view class="weui-flex__item add-wrap" data-target="billOperator" data-state="0" bindtap='tapBusiness'>
+        <view class="weui-flex__item add-wrap">
           <text class='iconfont icon-shibai1'></text>
         </view>
       </view>
@@ -269,9 +265,9 @@
     </view>
     <!-- 增值服务 -->
     <view class='addedService-wrap'>
-      <view class="weui-flex tap">
+      <view class="weui-flex tap active-1" data-target="billService" data-state="0" bindtap='tapBusiness'>
         <view class="weui-cell__bd">增值服务</view>
-        <view class="weui-flex__item add-wrap" data-target="billService" data-state="0" bindtap='tapBusiness'>
+        <view class="weui-flex__item add-wrap">
           <text class='iconfont icon-shibai1'></text>
         </view>
       </view>
@@ -328,9 +324,9 @@
     </view>
     <!-- 第三方抵扣 -->
     <view class='thirdParty-wrap'>
-      <view class="weui-flex tap">
+      <view class="weui-flex tap active-1" data-target="billThirdParty" data-state="0" bindtap='tapBusiness'>
         <view class="weui-cell__bd">第三方抵扣</view>
-        <view class="weui-flex__item add-wrap" data-target="billThirdParty" data-state="0" bindtap='tapBusiness'>
+        <view class="weui-flex__item add-wrap">
           <text class='iconfont icon-shibai1'></text>
         </view>
       </view>
@@ -388,9 +384,9 @@
     </view>
     <!-- 分期业务 -->
     <view class='installment-wrap'>
-      <view class="weui-flex tap" data-target="service">
+      <view class="weui-flex tap active-1" data-target="billInstallment" data-state="0" bindtap='tapBusiness'>
         <view class="weui-cell__bd">分期业务</view>
-        <view class="weui-flex__item add-wrap" data-target="billInstallment" data-state="0" bindtap='tapBusiness'>
+        <view class="weui-flex__item add-wrap">
           <text class='iconfont icon-shibai1'></text>
         </view>
       </view>
@@ -466,26 +462,21 @@
         </view>
       </view>
     </view>
-
   </scroll-view>
   <!-- 合计 -->
   <view class="weui-flex sum-wrap">
-
     <view class="weui-flex__item tl aomout">
       合计：
       <text class='c2'>  {{numberFr.formatNum(totalAmount,2)}}</text>
-
     </view>
-    <view class="weui-flex__item tc count">
-      共{{numberFr.formatNum(totalSum)}}件
+    <view class="weui-flex__item tr count">
+      共 <text class='count-desc'>{{numberFr.formatNum(totalSum)}}</text> 件
     </view>
     <button type='defualt' class="weui-flex__item pay" bindtap='tapPay'>
       收款
     </button>
   </view>
 </view>
-
-
 <!-- <view class="container pb-20" bindtap="tapAddSheet">
     <view class='add-button'>
       <text class='iconfont icon-shibai1'></text> 添加商品

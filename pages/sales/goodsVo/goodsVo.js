@@ -23,7 +23,7 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+  onLoad: function(options) {
     const that = this;
     const startTime = options.startTime;
     const endTime = options.endTime;
@@ -37,41 +37,41 @@ Page({
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () {
+  onReady: function() {
     const that = this;
-    util.getScrollHeight((56 + 35 + 60 + 6)).then((scrollHeight) => {
+    util.getScrollHeightByEle(['weui-search-bar', 'sel-time', 'sum-wrap'], true).then((scrollHeight) => {
       // 计算主体部分高度,单位为px
       that.setData({
         scrollHeight,
       })
     })
   },
-  showInput: function () {
+  showInput: function() {
     this.setData({
       inputShowed: true
     });
   },
 
-  inputTyping: function (e) {
+  inputTyping: function(e) {
     this.setData({
       queryKey: e.detail.value
     });
   },
-  hideInput: function () {
+  hideInput: function() {
     this.setData({
       queryKey: "",
       inputShowed: false
     });
     this.searchSubmit()
   },
-  clearInput: function () {
+  clearInput: function() {
     this.setData({
       queryKey: ""
     });
     this.searchSubmit()
   },
   //关键字搜索
-  searchSubmit: function () {
+  searchSubmit: function() {
     this.setData({
       pageNumber: 1,
       dataList: [],
@@ -79,9 +79,15 @@ Page({
     this.getGoodsList()
   },
   // 获取商品列表
-  getGoodsList: function () {
+  getGoodsList: function() {
     const _this = this;
-    const { queryKey, pageNumber, pageSize, startTime, endTime } = this.data;
+    const {
+      queryKey,
+      pageNumber,
+      pageSize,
+      startTime,
+      endTime
+    } = this.data;
     util.request(api.getGoodsSalesVoPageList, {
       startTime,
       endTime,
@@ -98,7 +104,7 @@ Page({
       });
     });
   },
-  scrolltolower: function () {
+  scrolltolower: function() {
     if (this.data.curListData.length === 0) {
       return;
     }
@@ -107,4 +113,10 @@ Page({
     });
     this.getGoodsList();
   },
+  /**
+   * 用户点击右上角分享
+   */
+  onShareAppMessage: function() {
+
+  }
 })

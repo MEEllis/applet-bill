@@ -24,7 +24,7 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+  onLoad: function(options) {
     this.getGoodsFirstClass();
     this.getGoodsList();
   },
@@ -32,7 +32,7 @@ Page({
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () {
+  onReady: function() {
     const that = this;
     util.getScrollHeight((56 + 48 + 10)).then((scrollHeight) => {
       // 计算主体部分高度,单位为px
@@ -42,43 +42,43 @@ Page({
     })
   },
   /**
- * 生命周期函数--监听页面显示
- */
-  onShow: function () {
+   * 生命周期函数--监听页面显示
+   */
+  onShow: function() {
     var pages = getCurrentPages()
-    if (appInstance.globalData.isChangeCompany===true){
-      appInstance.globalData.isChangeCompany=false;
+    if (appInstance.globalData.isChangeCompany === true) {
+      appInstance.globalData.isChangeCompany = false;
       wx.reLaunch({
         url: '/' + pages[pages.length - 1].route
       })
     }
   },
-  showInput: function () {
+  showInput: function() {
     this.setData({
       inputShowed: true
     });
   },
 
-  inputTyping: function (e) {
+  inputTyping: function(e) {
     this.setData({
       inputVal: e.detail.value
     });
   },
-  hideInput: function () {
+  hideInput: function() {
     this.setData({
       inputVal: "",
       inputShowed: false
     });
     this.searchSubmit()
   },
-  clearInput: function () {
+  clearInput: function() {
     this.setData({
       inputVal: ""
     });
     this.searchSubmit()
   },
   //关键字搜索
-  searchSubmit: function () {
+  searchSubmit: function() {
     this.setData({
       pageNumber: 1,
       dataList: [],
@@ -86,7 +86,7 @@ Page({
     this.getGoodsList()
   },
   //选择一级类别
-  cateTap: function (e) {
+  cateTap: function(e) {
     const activeCategoryId = e.currentTarget.dataset.id;
     this.setData({
       activeCategoryId,
@@ -96,16 +96,20 @@ Page({
     this.getGoodsList();
   },
   // 获取商品列表
-  getGoodsList: function () {
+  getGoodsList: function() {
     const _this = this;
-    const { inputVal, activeCategoryId, pageNumber, pageSize } = this.data;
+    const {
+      inputVal,
+      activeCategoryId,
+      pageNumber,
+      pageSize
+    } = this.data;
     util.request(api.getStockSimpleGoodsVoPageList, {
       firstClassId: activeCategoryId,
       queryKey: inputVal,
       pageNumber,
       pageSize,
-    }
-    ).then(res => {
+    }).then(res => {
       let dataList = _this.data.dataList.concat(res.data.dataList)
       _this.setData({
         dataList,
@@ -116,7 +120,7 @@ Page({
     });
   },
   // 获取一级类别列表
-  getGoodsFirstClass: function () {
+  getGoodsFirstClass: function() {
     const _this = this;
     util.request(api.getGoodsFirstClass, {},
       'GET'
@@ -131,8 +135,11 @@ Page({
       });
     });
   },
-  scrolltolower: function () {
-    const { total, pageNumber } = this.data;
+  scrolltolower: function() {
+    const {
+      total,
+      pageNumber
+    } = this.data;
     if (pageNumber >= total) {
       return;
     }
@@ -141,4 +148,10 @@ Page({
     });
     this.getGoodsList();
   },
+  /**
+   * 用户点击右上角分享
+   */
+  onShareAppMessage: function() {
+
+  }
 })

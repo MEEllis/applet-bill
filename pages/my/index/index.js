@@ -8,26 +8,26 @@ Page({
    * 页面的初始数据
    */
   data: {
-    WXUserInfo: {},//微信用户信息
-    ysUserInfo: {},//云盛用户信息
-    companyIndex:0,
+    WXUserInfo: {}, //微信用户信息
+    ysUserInfo: {}, //云盛用户信息
+    companyIndex: 0,
     companyList: []
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+  onLoad: function(options) {
     this.getWXUserInfo();
     this.getysUserInfo();
   },
 
-  getWXUserInfo: function (cb) {
+  getWXUserInfo: function(cb) {
     var that = this
     wx.login({
-      success: function () {
+      success: function() {
         wx.getUserInfo({
-          success: function (res) {
+          success: function(res) {
             that.setData({
               WXUserInfo: res.userInfo
             });
@@ -37,27 +37,29 @@ Page({
       }
     })
   },
-  getysUserInfo: function (cb) {
+  getysUserInfo: function(cb) {
     var that = this
     wx.getStorage({
       key: 'userInfo',
-      success: function (res) {
+      success: function(res) {
         that.setData({
           ysUserInfo: res.data
         });
       }
     })
   },
-  getCompanyList: function (cb) {
+  getCompanyList: function(cb) {
     var that = this;
-    const { ysUserInfo } = this.data;
+    const {
+      ysUserInfo
+    } = this.data;
     wx.getStorage({
       key: 'companyList',
-      success: function (res) {
-        let companyIndex=0;
-        for (let i = 0; i < res.data.length;i++){
-          if (ysUserInfo.companyId == res.data[i].id){
-            companyIndex=i;
+      success: function(res) {
+        let companyIndex = 0;
+        for (let i = 0; i < res.data.length; i++) {
+          if (ysUserInfo.companyId == res.data[i].id) {
+            companyIndex = i;
             break;
           }
         }
@@ -68,14 +70,16 @@ Page({
       }
     })
   },
-  bindPickerChange: function (e) {
+  bindPickerChange: function(e) {
     var that = this
     var index = e.detail.value;
     var companyId = this.data.companyList[index].id; // 这个id就是选中项的id
-    util.loginByWeixin().then(({ code, userInfo }) => {
+    util.loginByWeixin().then(({
+      code,
+      userInfo
+    }) => {
       return util.request(
-        api.changeLoginCompany,
-        {
+        api.changeLoginCompany, {
           code: code,
           companyId,
           userInfo: JSON.stringify(userInfo),
@@ -84,14 +88,14 @@ Page({
     }).then(ajaxData => {
       that.setData({
         companyList: ajaxData.data.companyList,
-        success: function () {
+        success: function() {
           that.getCompanyList()
         }
       });
       wx.setStorage({
         key: "userInfo",
         data: ajaxData.data.employeeVo,
-        success: function () {
+        success: function() {
           that.getysUserInfo();
           appInstance.globalData.isChangeCompany = true;
         }
@@ -102,10 +106,10 @@ Page({
       });
 
     })
- 
+
 
   },
-  relogin: function (e) {
+  relogin: function(e) {
     try {
       wx.clearStorageSync()
     } catch (e) {
@@ -117,5 +121,11 @@ Page({
 
       }
     })
+  },
+  /**
+   * 用户点击右上角分享
+   */
+  onShareAppMessage: function() {
+
   }
 })

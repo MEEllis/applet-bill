@@ -5,10 +5,9 @@ import reg from '../config/reg.js';
 
 // 查询草稿单
 function getRetailDraftOrderVo(billsId) {
-  return new Promise(function (resolve, reject) {
+  return new Promise(function(resolve, reject) {
     util.request(
-      api.getRetailDraftOrderVo,
-      {
+      api.getRetailDraftOrderVo, {
         billsId,
       },
     ).then(res => {
@@ -19,11 +18,32 @@ function getRetailDraftOrderVo(billsId) {
   })
 }
 
-function saveAndPostDraftRetailVo(saveData) {
-  return new Promise(function (resolve, reject) {
-    const { sectionId, addPage, remark, ignoredAmount, totalAmount, integralDeductionAmount, dataVo, onlinePayFlag, scanPayVo } = saveData;
+function saveAndPostDraftRetailVo(saveData,callback) {
+  return new Promise(function(resolve, reject) {
+    const {
+      sectionId,
+      addPage,
+      remark,
+      ignoredAmount,
+      totalAmount,
+      integralDeductionAmount,
+      dataVo,
+      onlinePayFlag,
+      scanPayVo
+    } = saveData;
 
-    const { vipVo, goodsVo, billsId } = addPage.data;
+    const {
+      vipVo,
+      goodsVo,
+      billsId,
+      contactUnitId,
+      allTotalAmount,
+      depositDetailList,
+      operatorDetailList,
+      addServiceDetailList,
+      thirdPartyDetailList,
+      installmentDetailList,
+    } = addPage.data;
 
 
     const goodsDetailList = [];
@@ -31,11 +51,6 @@ function saveAndPostDraftRetailVo(saveData) {
       "detailList": []
     };
     if (Array.isArray(goodsVo)) {
-      if (goodsVo.length === 0) {
-        util.showErrorToast('请添加商品！')
-        reject()
-        return;
-      }
       const abc = (goodItem, goodIndex, giftIndex) => {
         let orderNo = '';
         if (goodIndex >= 0) {
@@ -90,26 +105,83 @@ function saveAndPostDraftRetailVo(saveData) {
       "customerId": vipVo.customerId,
       "customerName": vipVo.customerName,
       "customerTelephone": vipVo.customerTelephone,
-      "onlinePayFlag": onlinePayFlag,
+      "contactUnitId": contactUnitId,
       "scanPayVo": scanPayVo,
       "ignoredAmount": ignoredAmount,
       "totalAmount": totalAmount,
-      "integralDeductionAmount": integralDeductionAmount,
       "totalPayAmount": util.accSub(totalAmount, ignoredAmount),
       "shouldReceiveAmount": util.accSub(totalAmount, ignoredAmount),
+      "integralDeductionAmount": integralDeductionAmount,
+      "onlinePayFlag": onlinePayFlag,
       "remark": remark,
       "goodsDetailList": goodsDetailList,
       "paymentReceivedOrderVo": paymentReceivedOrderVo,
+      depositDetailList,
+      operatorDetailList,
+      addServiceDetailList,
+      thirdPartyDetailList,
+      installmentDetailList,
+      timestamp: new Date().getTime()
     };
-    if (!!billsId){
+    if (!!billsId) {
       addData.billsId = billsId;
     }
     const order = JSON.stringify(addData);
+    //开单前的验证数据
     util.request(
-      api.saveAndPostDraftRetailVo,
-      { order }
+      api.validateDraftRetailVoBeforePost, {
+        order
+      }
     ).then(res => {
-      resolve(res)
+      if (res.data.validateResult === 'Confirm') {
+        wx.showModal({
+          title: '提示',
+          content: res.data.message,
+          confirmColor: '#476EC9',
+          success: function(res) {
+            if (res.confirm) {
+              if (callback){
+                callback()
+              }
+              util.requestFly(
+                api.saveAndPostDraftRetailVo, {
+                  order
+                 }).then(res => {
+                   resolve(res)
+                 }).catch(res => {
+                   reject(false)
+                 })
+            } else if (res.cancel) {
+              reject(false)
+            }
+          }
+        })
+      } else if (res.data.validateResult === 'Success') {
+        if (callback) {
+          callback()
+        }
+        util.requestFly(
+          api.saveAndPostDraftRetailVo, {
+            order
+           }).then(res => {
+             resolve(res)
+           }).catch(res => {
+             reject(false)
+           })
+      } else if (res.data.validateResult === 'Error') {
+        wx.showModal({
+          title: '提示',
+          showCancel:false,
+          confirmColor:'#476EC9',
+          content: res.data.message,
+          success: function (res) {
+         
+          }
+        })
+        reject(false)
+      }
+    }).catch(res => {
+      reject(false)
     })
   })
 }

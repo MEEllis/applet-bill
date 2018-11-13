@@ -17,9 +17,9 @@ Page({
     thirdPartyName: '请选择', //第三方活动名称
     deductionAmount: '0', //抵扣金额
     settlementAmount: '0', //结算金额
+    settlementAmountFirst: '0', // 选择第三方活动名称的结算金额
     businessNo: '', //业务号
     remark: '', //明细备注
-
     sectionId: '',
     thirdPartyContactUnitList: [],
     thirdPartyList: [],
@@ -47,25 +47,40 @@ Page({
       state,
       itemIndex,
     });
+    this.setDelta();
+    this.getThirdPartyContactUnitVoList();
     let barTitle = '添加第三方折扣'
     if (state !== '0') {
       barTitle = '修改第三方折扣'
+      this.getThirdPartyVoList(()=>{
+        const {
+          thirdPartyList,
+          thirdPartyId,
+        } = this.data;
+        //获取settlementAmount
+        for (let i = 0; i < thirdPartyList.length;i++){
+          const thirdPartyItem=thirdPartyList[i];
+          if (thirdPartyItem.id == thirdPartyId){
+            this.setData({
+              settlementAmountFirst: settlementAmount
+            })
+          }
+        }
+      })
     }
     wx.setNavigationBarTitle({
       title: barTitle,
     })
-    this.setDelta();
-    this.getThirdPartyContactUnitVoList();
   },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function() {
     const that = this;
-    util.getScrollHeightByEle(['btn-wrap']).then((scrollHeight) => {
+    util.getScrollHeightByEle(['btn-wrap'], true).then((scrollHeight) => {
       // 计算主体部分高度,单位为px
       that.setData({
-        scrollHeight,
+        scrollHeight: scrollHeight - 1,
       })
     })
   },
@@ -86,6 +101,7 @@ Page({
         thirdPartyName: '请选择',
         deductionAmount: '0',
         settlementAmount: '0',
+        settlementAmountFirst: '0',
         lastContactUnitId: contactUnitId,
       })
       this.getThirdPartyVoList()
@@ -126,6 +142,22 @@ Page({
       const setObj = {}
       setObj[target] = num
       this.setData(setObj)
+      //抵现金额
+      if (target == 'deductionAmount') {
+        //  若所选的“业务名称”对应的“结算金额是0”，则自动将“抵现金额”赋值给“结算金额”
+        setTimeout(() => {
+          const {
+            settlementAmountFirst,
+            deductionAmount,
+          }=this.data
+          if (Number(settlementAmountFirst)==0){
+            this.setData({
+              settlementAmount: deductionAmount
+            })
+          }
+         
+        }, 20)
+      }
     }
   },
 
@@ -246,7 +278,7 @@ Page({
     });
   },
   //业务名称
-  getThirdPartyVoList: function() {
+  getThirdPartyVoList: function(callback) {
     const that = this;
     const {
       contactUnitId,
@@ -258,6 +290,10 @@ Page({
       that.setData({
         thirdPartyList: res.data.dataList
       })
+      if (callback){
+        callback()
+      }
+
     });
   },
 

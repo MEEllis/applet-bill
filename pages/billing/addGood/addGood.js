@@ -13,7 +13,7 @@ Page({
     sectionName: '',
     sectionId: '',
     sectionList: [],
-    contactUnitId:'',
+    contactUnitId: '',
     customerTelephone: '',
     customerName: '',
     totalSum: 0,
@@ -35,10 +35,11 @@ Page({
     installmentToggle: false,
     installmentDetailList: [],
     vipVo: {},
-    depositDetail: [],
+    depositDetailList: [],
     delBtnWidth: 80,
     curSelIndex: '',
     scrollHeight: 0,
+    remark: '',
     billsId: '', //草稿单id
   },
 
@@ -54,11 +55,11 @@ Page({
       billsId,
     });
     if (billsId != '') {
-      this.getCompanyList();
+      this.getRetailDraftOrderVo();
     } else {
       this.getysUserInfo();
     }
-    this.getVipVo(); //加载会员信息
+
   },
 
   /**
@@ -66,10 +67,10 @@ Page({
    */
   onReady: function() {
     const that = this;
-    util.getScrollHeightByEle(['banner-top', 'sum-wrap']).then((scrollHeight) => {
+    util.getScrollHeightByEle(['banner-top', 'sum-wrap'],true).then((scrollHeight) => {
       // 计算主体部分高度,单位为px
       that.setData({
-        scrollHeight,
+        scrollHeight: scrollHeight - 1,
       })
     })
   },
@@ -84,7 +85,7 @@ Page({
       addServiceDetailList,
       thirdPartyDetailList,
       installmentDetailList,
-      depositDetail,
+      depositDetailList,
       ignoredAmount,
       integralDeductionAmount,
     } = this.data
@@ -151,10 +152,10 @@ Page({
     }
 
     // 定金  (控制：应付金额)
-    if (Array.isArray(depositDetail)) {
-      for (let i = 0; i < depositDetail.length; i++) {
-        const item = depositDetail[i];
-        depositAmount = util.accAdd(depositAmount, item.importDepositDetailAmount)
+    if (Array.isArray(depositDetailList)) {
+      for (let i = 0; i < depositDetailList.length; i++) {
+        const item = depositDetailList[i];
+        depositAmount = util.accAdd(depositAmount, item.importdepositDetailListAmount)
       }
     }
 
@@ -171,12 +172,7 @@ Page({
       goodsVo,
     })
   },
-  // 上一步
-  tapPrevious: function(e) {
-    wx.navigateBack({
 
-    })
-  },
   // 存草稿
   tapSaveDraft: function(e) {
     this.saveDraft((res) => {
@@ -191,7 +187,7 @@ Page({
     const {
       goodsVo,
       vipVo,
-      depositDetail,
+      depositDetailList,
       operatorDetailList,
       addServiceDetailList,
       thirdPartyDetailList,
@@ -202,84 +198,87 @@ Page({
       customerTelephone,
       totalAmount,
       allTotalAmount,
+      ignoredAmount,
+      integralDeductionAmount,
+      remark
     } = this.data;
-    if (Array.isArray(goodsVo)) {
-      if (goodsVo.length === 0) {
-        util.showErrorToast('请添加商品！')
-      } else {
-        const goodsDetailList = [];
-        const addItemFun = function(item, goodIndex, giftIndex) {
-          let orderNo = '';
-          if (goodIndex >= 0) {
-            orderNo += (goodIndex + 1)
-          }
-
-          if (giftIndex >= 0) {
-            orderNo += '.' + (giftIndex + 1)
-          }
-          return {
-            "orderNo": orderNo,
-            "giftFlag": item.isGift == 1 ? 1 : 0,
-            "storageId": item.storageId,
-            "goodsId": item.goodsId,
-            "imeiId": item.imeiId,
-            "goodsNumber": item.goodsNumber,
-            "retailPrice": item.retailPrice,
-            "discountRate": item.discountRate,
-            "discountedPrice": item.discountedPrice,
-            "discountedAmount": item.discountedAmount,
-            "remark": item.remark
-          }
-        }
-        for (let i = 0; i < goodsVo.length; i++) {
-          const goodsItem = goodsVo[i];
-          goodsDetailList.push(addItemFun(goodsItem, i));
-          if (Array.isArray(goodsItem.giftList)) {
-            for (let j = 0; j < goodsItem.giftList.length; j++) {
-              const giftItem = goodsItem.giftList[i];
-              goodsDetailList.push(addItemFun(giftItem, i, j));
-            }
-          }
-        }
-
-        const order = JSON.stringify({
-          "billsId": billsId,
-          "sectionId": sectionId,
-          "contactUnitId": contactUnitId,
-          "customerId": vipVo.customerId,
-          "customerName": vipVo.customerName,
-          "customerTelephone": customerTelephone,
-          "ignoredAmount": ignoredAmount,
-          "totalAmount": allTotalAmount,
-          "totalPayAmount": totalAmount,
-          "shouldReceiveAmount": totalAmount,
-          "integralDeductionAmount": integralDeductionAmount,
-          "remark": "",
-          "goodsDetailList": goodsDetailList,
-          "paymentReceivedOrderVo": {
-            "detailList": []
-          },
-          depositDetail,
-          operatorDetailList,
-          addServiceDetailList,
-          thirdPartyDetailList,
-          installmentDetailList,
-        });
-
-        util.request(
-          api.saveDraftRetailVo, {
-            order
-          }
-        ).then(res => {
-          util.showErrorToast('保存草稿单成功！')
-          if (callBack) {
-            callBack(res)
-          }
-        })
-      }
-    } else {
-      util.showErrorToast('请添加商品！')
+    if (customerTelephone.length < 11) {
+      util.showErrorToast('请输入正确的手机号格式！');
+      return;
     }
+    if (vipVo.customerName == "") {
+      util.showErrorToast('请输入客户姓名！');
+      return;
+    }
+    const goodsDetailList = [];
+    const addItemFun = function(item, goodIndex, giftIndex) {
+      let orderNo = '';
+      if (goodIndex >= 0) {
+        orderNo += (goodIndex + 1)
+      }
+
+      if (giftIndex >= 0) {
+        orderNo += '.' + (giftIndex + 1)
+      }
+      return {
+        "orderNo": orderNo,
+        "giftFlag": item.isGift == 1 ? 1 : 0,
+        "storageId": item.storageId,
+        "goodsId": item.goodsId,
+        "imeiId": item.imeiId,
+        "goodsNumber": item.goodsNumber,
+        "retailPrice": item.retailPrice,
+        "discountRate": item.discountRate,
+        "discountedPrice": item.discountedPrice,
+        "discountedAmount": item.discountedAmount,
+        "remark": item.remark
+      }
+    }
+    for (let i = 0; i < goodsVo.length; i++) {
+      const goodsItem = goodsVo[i];
+      goodsDetailList.push(addItemFun(goodsItem, i));
+      if (Array.isArray(goodsItem.giftList)) {
+        for (let j = 0; j < goodsItem.giftList.length; j++) {
+          const giftItem = goodsItem.giftList[i];
+          goodsDetailList.push(addItemFun(giftItem, i, j));
+        }
+      }
+    }
+
+    const order = JSON.stringify({
+      "billsId": billsId,
+      "sectionId": sectionId,
+      "contactUnitId": contactUnitId,
+      "customerId": vipVo.customerId,
+      "customerName": vipVo.customerName,
+      "customerTelephone": customerTelephone,
+      "ignoredAmount": ignoredAmount,
+      "totalAmount": allTotalAmount,
+      "totalPayAmount": totalAmount,
+      "shouldReceiveAmount": totalAmount,
+      "integralDeductionAmount": integralDeductionAmount,
+      "remark": remark,
+      "goodsDetailList": goodsDetailList,
+      "paymentReceivedOrderVo": {
+        "detailList": []
+      },
+      depositDetailList,
+      operatorDetailList,
+      addServiceDetailList,
+      thirdPartyDetailList,
+      installmentDetailList,
+    });
+
+    util.request(
+      api.saveDraftRetailVo, {
+        order
+      }
+    ).then(res => {
+      util.showErrorToast('保存草稿单成功！')
+      if (callBack) {
+        callBack(res)
+      }
+    })
   },
   // 删除本单
   tapDelDraft: function(e) {
@@ -310,10 +309,10 @@ Page({
       content: '您确定新开单吗？确定后，本单将存为草稿。',
       success: function(res) {
         if (res.confirm) {
-          that.saveDraft((res) => {
+          that.saveDraft(() => {
             setTimeout(() => {
-              wx.redirectTo({
-                url: '/pages/billing/newBilling/newBilling'
+              wx.switchTab({
+                url: '/pages/billing/index/index'
               });
             }, 1500)
           })
@@ -514,7 +513,7 @@ Page({
       } = res.data;
       const {
         goodsDetailList,
-        depositDetail,
+        depositDetailList,
         operatorDetailList,
         addServiceDetailList,
         thirdPartyDetailList,
@@ -522,6 +521,11 @@ Page({
         contactUnitId,
         ignoredAmount,
         integralDeductionAmount,
+        remark,
+        customerTelephone,
+        customerName,
+        sectionId,
+        sectionName
       } = orderVo;
       if (Array.isArray(goodsDetailList)) {
         for (let i = 0; i < goodsDetailList.length; i++) {
@@ -529,11 +533,12 @@ Page({
           if ((goodsDetailItem.orderNo % 1) == 0) {
             goodsDetailItem.isGift = goodsDetailItem.giftFlag;
             goodsDetailItem.giftList = [];
-            if (!!customerTelephone != !!orderVo.customerTelephone) {
-              goodsDetailItem.discountRate = that.getDiscountRateByGoodsClassId(goodsDetailItem)
-              goodInfo.discountedPrice = Number(util.accDiv(util.accMul(goodsDetailItem.retailPrice, goodsDetailItem.discountRate), 100).toFixed(2));
-              goodInfo.discountedAmount = Number(util.accMul(goodInfo.discountedPrice, goodInfo.goodsNumber));
-            }
+
+            // if (!!customerTelephone != !!orderVo.customerTelephone) {
+            //   goodsDetailItem.discountRate = that.getDiscountRateByGoodsClassId(goodsDetailItem)
+            //   goodsDetailItem.discountedPrice = Number(util.accDiv(util.accMul(goodsDetailItem.retailPrice, goodsDetailItem.discountRate), 100).toFixed(2));
+            //   goodsDetailItem.discountedAmount = Number(util.accMul(goodsDetailItem.discountedPrice, goodsDetailItem.goodsNumber));
+            // }
             goodsVo.push(goodsDetailItem)
           }
         }
@@ -543,11 +548,11 @@ Page({
             const orderNoArr = goodsDetailItem.orderNo.split(".");
             goodsDetailItem.isGift = goodsDetailItem.giftFlag;
             if (goodsVo[orderNoArr[0]]) {
-              if (!!customerTelephone != !!orderVo.customerTelephone) {
-                goodsDetailItem.discountRate = that.getDiscountRateByGoodsClassId(goodsDetailItem)
-                goodInfo.discountedPrice = Number(util.accDiv(util.accMul(goodsDetailItem.retailPrice, goodsDetailItem.discountRate), 100).toFixed(2));
-                goodInfo.discountedAmount = Number(util.accMul(goodInfo.discountedPrice, goodInfo.goodsNumber));
-              }
+              // if (!!customerTelephone != !!orderVo.customerTelephone) {
+              //   goodsDetailItem.discountRate = that.getDiscountRateByGoodsClassId(goodsDetailItem)
+              //   goodsDetailItem.discountedPrice = Number(util.accDiv(util.accMul(goodsDetailItem.retailPrice, goodsDetailItem.discountRate), 100).toFixed(2));
+              //   goodsDetailItem.discountedAmount = Number(util.accMul(goodsDetailItem.discountedPrice, goodsDetailItem.goodsNumber));
+              // }
               goodsVo[orderNoArr[0]].giftList.push(goodsDetailItem)
             }
           }
@@ -555,17 +560,23 @@ Page({
       }
       that.setData({
         goodsVo,
-        depositDetail,
+        depositDetailList,
         operatorDetailList,
         addServiceDetailList,
         thirdPartyDetailList,
         installmentDetailList,
-        contactUnitId,
-        ignoredAmount,
-        integralDeductionAmount,
+        contactUnitId: contactUnitId || '',
+        ignoredAmount: ignoredAmount || '',
+        integralDeductionAmount: integralDeductionAmount || '',
+        remark: remark || '',
+        customerTelephone,
+        customerName,
+        sectionId,
+        sectionName
       });
       that.onShow();
-
+      that.getVipVo()
+      this.getCompanyList();
     })
   },
   // 获取会员信息
@@ -573,8 +584,7 @@ Page({
     var that = this;
     const {
       customerTelephone,
-      customerName,
-      billsId,
+      customerName
     } = this.data;
     if (customerTelephone) {
       util.request(
@@ -585,12 +595,13 @@ Page({
         const {
           vipVo
         } = res.data
+
         //非会员
         if (vipVo === null) {
           that.setData({
             vipVo: {
-              "customerName": customerName,
               "customerTelephone": customerTelephone,
+              "customerName": customerName,
             },
           });
         }
@@ -611,25 +622,39 @@ Page({
           }
 
         }
-
-        if (billsId !== '') {
-          this.getRetailDraftOrderVo();
-        }
-
+        this.updateGoodDiscountRate()
       })
     } else {
       that.setData({
         vipVo: {
-          "customerName": customerName,
           "customerTelephone": customerTelephone,
+          "customerName": customerName,
         },
       });
-
-      if (billsId !== '') {
-        this.getRetailDraftOrderVo();
-      }
+      this.updateGoodDiscountRate()
     }
+  },
 
+  //更新商品折扣率
+  updateGoodDiscountRate: function() {
+    const {
+      goodsVo,
+    } = this.data;
+    const that = this;
+    for (let i = 0; i < goodsVo.length; i++) {
+      const goodsDetailItem = goodsVo[i];
+      goodsDetailItem.discountRate = that.getDiscountRateByGoodsClassId(goodsDetailItem)
+      goodsDetailItem.discountedPrice = Number(util.accDiv(util.accMul(goodsDetailItem.retailPrice, goodsDetailItem.discountRate), 100).toFixed(2));
+      goodsDetailItem.discountedAmount = Number(util.accMul(goodsDetailItem.discountedPrice, goodsDetailItem.goodsNumber));
+      for (let j = 0; i < goodsDetailItem.giftList.length; j++) {
+        const goodsGiftItem = goodsDetailItem.giftList[j];
+        goodsGiftItem.discountRate = that.getDiscountRateByGoodsClassId(goodsGiftItem)
+        goodsGiftItem.discountedPrice = Number(util.accDiv(util.accMul(goodsGiftItem.retailPrice, goodsGiftItem.discountRate), 100).toFixed(2));
+        goodsGiftItem.discountedAmount = Number(util.accMul(goodsGiftItem.discountedPrice, goodsGiftItem.goodsNumber));
+      }
+
+
+    }
   },
   //获取该商品的折扣率
   getDiscountRateByGoodsClassId: function({
@@ -717,7 +742,7 @@ Page({
       sectionIndex: index,
       sectionName: name,
       sectionId,
-      depositDetail: [],
+      depositDetailList: [],
       operatorDetailList: [],
       addServiceDetailList: [],
       thirdPartyDetailList: [],
@@ -749,18 +774,49 @@ Page({
     }
     this.setData({
       vipVo: null,
-      customerName: '',
+
       customerTelephone: tel,
       addServiceDetailList: [],
     });
   },
   inputName: function(e) {
     const that = this;
+    const {
+      vipVo
+    } = this.data;
+    vipVo.customerName = e.detail.value;
     const customerName = e.detail.value;
-
     this.setData({
-      customerName,
+      vipVo,
+      customerName
     });
+  },
+  //删除业务
+  delBusiness: function(e) {
+    const {
+      list,
+      index,
+      toggle
+    } = e.target.dataset
+    this.delBusinessCon({
+      list,
+      index,
+      toggle
+    })
+  },
+  //删除业务
+  delBusinessCon: function({
+    list,
+    index,
+    toggle
+  }) {
+    this.data[list].splice(index, 1);
+    const setObj = {}
+    setObj[list] = this.data[list]
+    if (toggle !== undefined) {
+      setObj[toggle] = !this.data[toggle];
+    }
+    this.setData(setObj);
   },
   getysUserInfo: function() {
     var that = this
@@ -814,5 +870,11 @@ Page({
     wx.navigateTo({
       url: `/pages/common/${target}/${target}?route=${currentPage.route}&state=${state}&itemIndex=${index === undefined ? '-1' : index}`,
     })
+  },
+  /**
+   * 用户点击右上角分享
+   */
+  onShareAppMessage: function() {
+
   }
 })

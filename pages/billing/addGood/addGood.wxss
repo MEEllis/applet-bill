@@ -25,6 +25,10 @@
   font-size: 57rpx;
 }
 
+.banner-top .icon-delete {
+  font-size: 57rpx;
+}
+
 .banner-top .icon-baocuncaogaodan1, .banner-top .icon-xinkaidan {
   font-size: 57rpx;
   color: #fff;
@@ -42,7 +46,7 @@
   background-color: #fff;
 }
 
-.vipVo-wrap .icon-mendian, .vipVo-wrap .icon-iconcustomer {
+.vipVo-wrap .icon-bumen1, .vipVo-wrap .icon-iconcustomer {
   color: #476ec9;
   font-size: 48rpx;
   margin-right: 20rpx;
@@ -53,6 +57,10 @@
   padding: 16rpx 30rpx;
   font-size: 34rpx;
   color: #333;
+}
+
+.vipVo-wrap .userinfo::after {
+  left: 30rpx;
 }
 
 .vipVo-wrap .form {
@@ -233,6 +241,7 @@
   display: inline-block;
   transform: rotate(45deg);
   font-size: 48rpx;
+  color: #8c8c8c;
 }
 
 .good-list {
@@ -344,6 +353,7 @@
   line-height: 98rpx;
   background-color: #fff;
   border-top: 1rpx solid #e6e6e6;
+  margin-top: 2rpx;
 }
 
 .sum-wrap .pay {
@@ -354,6 +364,10 @@
   border-radius: 0 !important;
   flex: 2;
   line-height: 98rpx;
+}
+
+.sum-wrap .pay:active {
+  background-color: rgba(255, 175, 35, 0.8) !important;
 }
 
 .sum-wrap .aomout {
@@ -367,6 +381,13 @@
 
 .sum-wrap .count {
   flex: 3;
+  padding-right: 20rpx;
+  color: #666;
+}
+
+.sum-wrap .count .count-desc {
+  color: #333;
+  font-weight: bolder;
 }
 
 .sum-wrap .sum {
@@ -375,10 +396,6 @@
 
 .banner-top .icon-shangyibu {
   background-color: #7aa3f9;
-}
-
-.banner-top .icon-delete {
-  background-color: #78c4f4;
 }
 
 .i-swipeout-item {

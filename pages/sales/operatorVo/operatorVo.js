@@ -39,7 +39,7 @@ Page({
    */
   onReady: function () {
     const that = this;
-    util.getScrollHeight((56 + 35 + 60 + 6)).then((scrollHeight) => {
+    util.getScrollHeightByEle(['weui-search-bar', 'sel-time', 'sum-wrap'], true).then((scrollHeight) => {
       // 计算主体部分高度,单位为px
       that.setData({
         scrollHeight,

@@ -49,13 +49,13 @@ Page({
       for (let i = 0; i < res.data.orderVo.goodsDetailList.length; i++) {
         const goodsDetailItem = res.data.orderVo.goodsDetailList[i];
         totalCount += Number(goodsDetailItem.goodsCount);
-        if (Array.isArray(goodsDetailItem.giftGoodsList)){
+        if (Array.isArray(goodsDetailItem.giftGoodsList)) {
           for (let j = 0; j < goodsDetailItem.giftGoodsList.length; j++) {
             const giftDetailItem = goodsDetailItem.giftGoodsList[j];
             totalCount += Number(giftDetailItem.goodsCount)
           }
         }
-       
+
       }
 
       _this.setData({
@@ -99,4 +99,10 @@ Page({
       url: `/pages/billing/paySuccess/paySuccess?totalPayAmount=${orderVo.totalAmount}&billsId=${billsId}`
     });
   },
+  /**
+   * 用户点击右上角分享
+   */
+  onShareAppMessage: function() {
+
+  }
 })

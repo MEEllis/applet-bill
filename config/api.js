@@ -1,24 +1,30 @@
 let NewApiRootUrl = ''
 let baseApiRootUrl
 //NewApiRootUrl = 'http://127.0.0.1:8080/wxapi/'; // 预生产的接口
-//NewApiRootUrl = 'http://192.168.0.62/wxapi/'; // 后台联调的接口
+
  // 提交测试的接口
-// NewApiRootUrl = 'https://branch.phoneerp.com/wxapi/';
-// baseApiRootUrl = 'https://branchapi.phoneerp.com/';
+NewApiRootUrl = 'https://branch.phoneerp.com/wxapi/';
+baseApiRootUrl = 'https://branchapi.phoneerp.com/';
+
+// NewApiRootUrl = 'http://192.168.0.162/wxapi/'; // 后台联调的接口
+
+
 
 
 // 预生产的接口
 //NewApiRootUrl = 'https://pre.phoneerp.com/wxapi/'; 
 
 // 线上的接口
-// NewApiRootUrl = 'https://www.phoneerp.com/wxapi/';
-// baseApiRootUrl = 'https://api.phoneerp.com/';
+NewApiRootUrl = 'https://www.phoneerp.com/wxapi/';
+baseApiRootUrl = 'https://api.phoneerp.com/';
 
 
 // 模拟接口地址
-NewApiRootUrl = 'http://rap2api.taobao.org/app/mock/13207/wxapi/'; 
-baseApiRootUrl = 'http://rap2api.taobao.org/app/mock/13207/wxapi/';
-
+// NewApiRootUrl = 'http://rap2api.taobao.org/app/mock/13207/wxapi/'; 
+// baseApiRootUrl = 'http://rap2api.taobao.org/app/mock/13207/wxapi/';
+//开发环境
+// NewApiRootUrl = 'https://trunk.phoneerp.com/wxapi/';
+// baseApiRootUrl = 'https://trunkapi.phoneerp.com/';
 
 module.exports = {
   authLogin: NewApiRootUrl + 'auth/login', //账号密码登录
@@ -70,8 +76,12 @@ module.exports = {
   getRetailOrderVoPageList: NewApiRootUrl + 'common/getRetailOrderVoPageList', // 零售草稿单
   deleteDraftRetailOrderVo: NewApiRootUrl + 'common/deleteDraftRetailOrderVo', //  删除零售草稿单
   getSectionAccountVoList: NewApiRootUrl + 'common/getSectionAccountVoList', // 获取部门可使用资金账户
+  validateDraftRetailVoBeforePost: NewApiRootUrl + 'common/validateDraftRetailVoBeforePost', // 保存并过账前验证单据
   saveAndPostDraftRetailVo: NewApiRootUrl + 'common/saveAndPostDraftRetailVo', // 保存草稿单并过账
   getRetailDraftOrderVo: NewApiRootUrl + 'common/getRetailDraftOrderVo', // 查询草稿单
   updateRetailRemarkById: NewApiRootUrl + 'common/updateRetailRemarkById', // 修改零售单备注
+  monitorOnlinePayingOrder: NewApiRootUrl + 'common/monitorOnlinePayingOrder', // 监听支付中的零售单
+
+
   print: baseApiRootUrl + 'api/v1/ws/clerk/assistant/retail/print', // 打印零售单
 }

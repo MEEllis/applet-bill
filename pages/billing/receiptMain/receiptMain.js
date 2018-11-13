@@ -23,6 +23,7 @@ Page({
     sectionId: '',
     vipVo: {},
     dataVo: null,
+    isCover:true,
   },
 
   /**
@@ -68,11 +69,13 @@ Page({
       addPage,
       ignoredAmount,
       integralDeductionAmount,
+      remark,
     } = this.data;
     if (addPage) {
       addPage.setData({
         ignoredAmount,
         integralDeductionAmount,
+        remark,
       })
       addPage.onShow()
       addPage.tapSaveDraft();
@@ -83,6 +86,7 @@ Page({
     const {
       paytype
     } = e.currentTarget.dataset;
+    const that=this;
     const {
       sectionId,
       addPage,
@@ -99,7 +103,7 @@ Page({
         goodsVo
       } = addPage.data;
       if (Number(totalPayAmount) === 0) {
-        util.showErrorToast('应收为0时应该不能用扫码收款!')
+        util.showErrorToast('应收为0，请点击线下收款结单！')
         return;
       }
       const itemVo = dataVo[8][0];
@@ -124,11 +128,21 @@ Page({
               8: [itemVo]
             }
           }
-          bill.saveAndPostDraftRetailVo(saveData).then((res) => {
-            wx.redirectTo({
-              url: `/pages/billing/paySuccess/paySuccess?totalPayAmount=${totalPayAmount}&billsId=${res.data.billsId}`
+         
+          bill.saveAndPostDraftRetailVo(saveData,()=>{
+            that.setData({
+              isCover: false,
             });
-          })
+          }).then((res) => {
+            wx.reLaunch({
+              url: `/pages/billing/paySuccess/paySuccess?totalPayAmount=${totalPayAmount}&billsId=${res.data.billsId}`
+            })
+          }).catch((err) => {
+            this.setData({
+              isCover: true,
+            });
+          });
+              
         }
       })
     } else {
@@ -191,8 +205,6 @@ Page({
       addPage: mainPage.addPage,
     });
     if (addPage != null) {
-
-
       const {
         sectionId,
         totalAmount,
@@ -203,6 +215,7 @@ Page({
         loanAmount,
         deductionAmount,
         vipVo,
+        remark,
       } = addPage.data
       this.setData({
         sectionId,
@@ -214,6 +227,7 @@ Page({
         loanAmount,
         deductionAmount,
         vipVo,
+        remark,
       });
     }
   }

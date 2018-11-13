@@ -37,6 +37,7 @@ Component({
       }=this.data;
       let inputNum = e.detail.value;
       if (/^\d*(\.\d{0,2})?$/.test(inputNum)) {
+        inputNum = inputNum === '' ? 0 : inputNum
         this.setData({
           num: inputNum,
         });

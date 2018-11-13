@@ -1,7 +1,5 @@
 import api from '../config/api.js';
 
-
-
 function formatTime(date, fmt = 'yyyy-MM-dd') {
   var o = {
     "M+": date.getMonth() + 1, //月份   
@@ -28,12 +26,11 @@ function request(url, data = {}, method = "POST", config) {
     config = config || {};
     if (config.hideLoading !== true) {
       wx.showLoading({
-        title: '小云拼命加载中...',
+        title: config.title || '小云拼命加载中...' ,
         mask: true,
         icon: 'loading'
       })
     }
-
     wx.request({
       url: url,
       data: data,
@@ -76,6 +73,19 @@ function request(url, data = {}, method = "POST", config) {
 
               }
             })
+          }
+          //在线支付失败,单据已自动红冲!
+          else if (res.data.result == -16) {
+            wx.showModal({
+              title: '收款失败',
+              showCancel: false,
+              confirmColor: '#476EC9',
+              content: res.data.desc,
+              success: function(res) {
+
+              }
+            })
+            reject(false)
           } else {
             showErrorToast(res.data.desc)
             reject(res.data);
@@ -94,6 +104,99 @@ function request(url, data = {}, method = "POST", config) {
     })
   });
 }
+// 这个单独给支付接口用
+function requestFly(url, data = {}, method = "POST", config) {
+  return new Promise(function(resolve, reject) {
+    config = config || {};
+    if (config.hideLoading !== true) {
+      wx.showLoading({
+        title: '收款中...',
+        mask: true,
+        icon: 'loading'
+      })
+    }
+    wx.request({
+      url: url,
+      data: data,
+      method: method,
+      header: {
+        'content-type': 'application/x-www-form-urlencoded',
+        'ERP-WX-TOKEN': wx.getStorageSync('token')
+      },
+      success: function(res) {
+        if (res.statusCode == 200) {
+          if (res.data.result == 1) {
+            resolve(res.data);
+          }
+          // 未登录时（-1），先调用自动登录
+          else if (res.data.result == -1) {
+            console.log(res.data)
+            loginByWeixin().then(({
+              code,
+              userInfo
+            }) => {
+              return request(
+                api.authAutoLogin, {
+                  code: code,
+                  userInfo: JSON.stringify(userInfo),
+                })
+            }).then(ajaxData => {
+              wx.setStorageSync('userInfo', ajaxData.data.employeeVo);
+              wx.setStorageSync('token', ajaxData.data['ERP-WX-TOKEN']);
+              wx.setStorageSync('companyList', ajaxData.data.companyList);
+            })
+          }
+          //自动登录失败（-15）
+          else if (res.data.result == -15) {
+            console.log(res.data)
+            wx.reLaunch({
+              url: '/pages/login/login',
+              success: (res) => {
+
+              }
+            })
+          }
+          //在线支付失败,单据已自动红冲!
+          else if (res.data.result == -16) {
+            wx.showModal({
+              title: '提示',
+              showCancel: false,
+              confirmColor: '#476EC9',
+              content: res.data.desc,
+              success: function(res) {
+
+              }
+            })
+            reject(false)
+          } else {
+            showErrorToast(res.data.desc)
+            reject(res.data);
+          }
+        } else {
+          showErrorToast('操作异常！')
+          reject(res.errMsg);
+        }
+      },
+      fail: function(err) {
+        wx.hideLoading()
+        request(
+          api.monitorOnlinePayingOrder, {
+            timestamp: JSON.parse(data.order).timestamp
+          },'POST',{
+            title:'收款中...',
+          }).then(res => {
+          resolve(res)
+        }).catch(res => {
+          reject(false)
+        })
+
+      }
+    })
+
+
+  });
+}
+
 
 
 /**
@@ -203,7 +306,7 @@ function getScrollHeight(subHeight) {
 
 
 //获取滚动高度通过元素获取高度
-function getScrollHeightByEle(subEle) {
+function getScrollHeightByEle(subEle, isXP) {
   return new Promise(function(resolve, reject) {
     wx.getSystemInfo({
       success: function(res) {
@@ -220,13 +323,21 @@ function getScrollHeightByEle(subEle) {
                 scrollHeight = scrollHeight - value.height
               }
             })
-            resolve(scrollHeight);
+            aa(scrollHeight)
           });
         } else {
           query.select('.' + subEle).boundingClientRect(function(rect) {
             scrollHeight = scrollHeight - rect.height
-            resolve(scrollHeight);
+            aa(scrollHeight)
           }).exec();
+        }
+
+        function aa(scrollHeight) {
+          //iPhone X适配
+          if (isXP === true && res.model.indexOf('iPhone X') > -1) {
+            scrollHeight = scrollHeight - 34;
+          }
+          resolve(scrollHeight);
         }
       },
       fail: function(err) {
@@ -328,6 +439,8 @@ function accMul(arg1, arg2) {
 }
 
 
+
+
 function accDiv(a, b) {
   var c, d, e = 0,
     f = 0;
@@ -343,6 +456,7 @@ function accDiv(a, b) {
 module.exports = {
   formatTime,
   request,
+  requestFly,
   showErrorToast,
   checkSession,
   loginByWeixin,

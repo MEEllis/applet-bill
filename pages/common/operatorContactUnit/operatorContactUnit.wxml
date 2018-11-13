@@ -5,8 +5,8 @@
 <!-- 商品列表 -->
 <scroll-view scroll-y='true' class="list-wrap" style="height:{{scrollHeight}}px;">
   <view class='list-item' bindtap='tapSel' data-id="{{item.id}}" data-name="{{item.name}}" wx:for-items="{{dataList}}" wx:key="">
-    <view class='list-item-title border-bottom'>
-      <view class='weui-cell'>
+    <view class='list-item-title border-bottom active-1'>
+      <view class='weui-cell '>
         <view class="weui-cell__bd">
           {{numberFr.stringNull(item.name)}}
         </view>

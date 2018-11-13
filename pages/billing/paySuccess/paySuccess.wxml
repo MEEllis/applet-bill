@@ -13,6 +13,7 @@
     </view>
     <view class="weui-msg__opr-area">
       <view class="weui-btn-area">
+        <button class="weui-btn" type="primary" bindtap='tapPrint'>云打印</button>
         <button class="weui-btn" type="primary" bindtap='tapNew'>新开单</button>
         <button class="weui-btn" type="default" bindtap='tapCur'>查看本单</button>
         <button class="weui-btn" type="default" bindtap='tapIndex'>返回首页</button>

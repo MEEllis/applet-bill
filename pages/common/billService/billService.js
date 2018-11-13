@@ -74,10 +74,10 @@ Page({
    */
   onReady: function() {
     const that = this;
-    util.getScrollHeightByEle(['btn-wrap']).then((scrollHeight) => {
+    util.getScrollHeightByEle(['btn-wrap'], true).then((scrollHeight) => {
       // 计算主体部分高度,单位为px
       that.setData({
-        scrollHeight,
+        scrollHeight: scrollHeight - 1,
       })
     })
   },

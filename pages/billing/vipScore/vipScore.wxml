@@ -2,7 +2,7 @@
   <wxs src="../../../filter/numberFr.wxs" module="numberFr"></wxs>
   <view class="weui-flex border-top">
     <view class="weui-flex__item lab">
-      抵现规则：{{vipVo.deductionIntegral}}积分兑换{{vipVo.deductionAmount}}元
+      抵现规则：{{vipVo.deductionIntegral||0}}积分兑换{{vipVo.deductionAmount||0}}元
     </view>
   </view>
   <view class="weui-flex border-top">

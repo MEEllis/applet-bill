@@ -57,9 +57,6 @@
   box-shadow: 0px 5rpx 20rpx 2rpx rgba(104, 141, 227, 0.2);
 }
 
-.weui-panel {
-  margin-top: 20rpx;
-}
 
 .weui-panel:before, .weui-panel:after {
   border: none;

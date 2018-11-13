@@ -48,7 +48,7 @@ Page({
     if (addPage != null) {
       this.setData({
         vipVo: addPage.data.vipVo,
-        sAmount: util.accMul(util.accDiv(addPage.data.vipVo.vipCardScore, addPage.data.vipVo.deductionIntegral), addPage.data.vipVo.deductionAmount),
+        sAmount: util.accMul(util.accDiv(addPage.data.vipVo.vipCardScore || 0, addPage.data.vipVo.deductionIntegral || 0), addPage.data.vipVo.deductionAmount || 0),
       });
     }
 

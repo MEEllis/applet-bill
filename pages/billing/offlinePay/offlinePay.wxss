@@ -31,7 +31,8 @@ page {
 .btnBlue {
   margin-right: 30rpx;
 }
-.y1{
+
+.y1 {
   font-size: 26rpx;
   color: #8c8c8c;
 }
