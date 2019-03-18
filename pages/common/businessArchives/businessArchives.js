@@ -76,6 +76,7 @@ Page({
       name,
       commission,
       integral,
+      system,
     } = e.currentTarget.dataset;
     const {
       addPage
@@ -86,6 +87,7 @@ Page({
         businessName: name,
         commission: Number(commission),
         commissionIntegral: Number(integral),
+        reductionMarginAmount: Number(system),
       })
     }
     wx.navigateBack({})

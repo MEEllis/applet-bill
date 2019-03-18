@@ -14,8 +14,8 @@ Page({
     sectionId: '',
     sectionList: [],
     contactUnitId: '',
-    customerTelephone: '',
-    customerName: '',
+    inputTelephone: '',
+    inputTelName: '',
     totalSum: 0,
     totalAmount: 0, //应收金额
     allTotalAmount: 0, //总金额
@@ -195,21 +195,26 @@ Page({
       billsId,
       sectionId,
       contactUnitId,
-      customerTelephone,
+      inputTelephone,
       totalAmount,
       allTotalAmount,
       ignoredAmount,
       integralDeductionAmount,
       remark
     } = this.data;
-    if (customerTelephone.length < 11) {
-      util.showErrorToast('请输入正确的手机号格式！');
-      return;
+
+    if (inputTelephone.length!=0){
+      if (inputTelephone.length < 11) {
+        util.showErrorToast('请输入正确的手机号格式！');
+        return;
+      }
+      if (vipVo.customerName == "") {
+        util.showErrorToast('请输入客户姓名！');
+        return;
+      }
     }
-    if (vipVo.customerName == "") {
-      util.showErrorToast('请输入客户姓名！');
-      return;
-    }
+
+  
     const goodsDetailList = [];
     const addItemFun = function(item, goodIndex, giftIndex) {
       let orderNo = '';
@@ -239,19 +244,24 @@ Page({
       goodsDetailList.push(addItemFun(goodsItem, i));
       if (Array.isArray(goodsItem.giftList)) {
         for (let j = 0; j < goodsItem.giftList.length; j++) {
-          const giftItem = goodsItem.giftList[i];
+          const giftItem = goodsItem.giftList[j];
           goodsDetailList.push(addItemFun(giftItem, i, j));
         }
       }
+    }
+
+    if (goodsDetailList.length == 0 && depositDetailList.length == 0 && operatorDetailList.length == 0){
+      util.showErrorToast('请填写单据明细！');
+      return;
     }
 
     const order = JSON.stringify({
       "billsId": billsId,
       "sectionId": sectionId,
       "contactUnitId": contactUnitId,
-      "customerId": vipVo.customerId,
-      "customerName": vipVo.customerName,
-      "customerTelephone": customerTelephone,
+      "customerId": util.stringNull(vipVo.customerId),
+      "customerName": util.stringNull(vipVo.customerName),
+      "customerTelephone": util.stringNull(vipVo.customerTelephone),
       "ignoredAmount": ignoredAmount,
       "totalAmount": allTotalAmount,
       "totalPayAmount": totalAmount,
@@ -502,11 +512,7 @@ Page({
   getRetailDraftOrderVo: function() {
     const {
       billsId,
-      sectionId,
-      goodsVo,
-      customerTelephone,
     } = this.data;
-    const that = this;
     bill.getRetailDraftOrderVo(billsId).then(res => {
       const {
         orderVo
@@ -527,18 +533,13 @@ Page({
         sectionId,
         sectionName
       } = orderVo;
+      const goodsVo=[]
       if (Array.isArray(goodsDetailList)) {
         for (let i = 0; i < goodsDetailList.length; i++) {
           const goodsDetailItem = goodsDetailList[i];
           if ((goodsDetailItem.orderNo % 1) == 0) {
             goodsDetailItem.isGift = goodsDetailItem.giftFlag;
             goodsDetailItem.giftList = [];
-
-            // if (!!customerTelephone != !!orderVo.customerTelephone) {
-            //   goodsDetailItem.discountRate = that.getDiscountRateByGoodsClassId(goodsDetailItem)
-            //   goodsDetailItem.discountedPrice = Number(util.accDiv(util.accMul(goodsDetailItem.retailPrice, goodsDetailItem.discountRate), 100).toFixed(2));
-            //   goodsDetailItem.discountedAmount = Number(util.accMul(goodsDetailItem.discountedPrice, goodsDetailItem.goodsNumber));
-            // }
             goodsVo.push(goodsDetailItem)
           }
         }
@@ -547,18 +548,15 @@ Page({
           if ((goodsDetailItem.orderNo % 1) != 0) {
             const orderNoArr = goodsDetailItem.orderNo.split(".");
             goodsDetailItem.isGift = goodsDetailItem.giftFlag;
-            if (goodsVo[orderNoArr[0]]) {
-              // if (!!customerTelephone != !!orderVo.customerTelephone) {
-              //   goodsDetailItem.discountRate = that.getDiscountRateByGoodsClassId(goodsDetailItem)
-              //   goodsDetailItem.discountedPrice = Number(util.accDiv(util.accMul(goodsDetailItem.retailPrice, goodsDetailItem.discountRate), 100).toFixed(2));
-              //   goodsDetailItem.discountedAmount = Number(util.accMul(goodsDetailItem.discountedPrice, goodsDetailItem.goodsNumber));
-              // }
-              goodsVo[orderNoArr[0]].giftList.push(goodsDetailItem)
+            var arrIndex = Number(orderNoArr[0]-1)
+            
+            if (goodsVo[arrIndex]) {
+              goodsVo[arrIndex].giftList.push(goodsDetailItem)
             }
           }
         }
       }
-      that.setData({
+      this.setData({
         goodsVo,
         depositDetailList,
         operatorDetailList,
@@ -569,27 +567,26 @@ Page({
         ignoredAmount: ignoredAmount || '',
         integralDeductionAmount: integralDeductionAmount || '',
         remark: remark || '',
-        customerTelephone,
-        customerName,
+        inputTelephone: customerTelephone || '',
+        inputTelName:customerName|| '',
         sectionId,
         sectionName
       });
-      that.onShow();
-      that.getVipVo()
+      this.getVipVo(false)
       this.getCompanyList();
     })
   },
   // 获取会员信息
-  getVipVo: function() {
+  getVipVo: function(updatePriceFlag) {
     var that = this;
     const {
-      customerTelephone,
-      customerName
+      inputTelephone,
+      inputTelName
     } = this.data;
-    if (customerTelephone) {
+    if (inputTelephone) {
       util.request(
         api.getVipVo, {
-          customerTelephone,
+          customerTelephone: inputTelephone,
         },
       ).then(res => {
         const {
@@ -600,8 +597,8 @@ Page({
         if (vipVo === null) {
           that.setData({
             vipVo: {
-              "customerTelephone": customerTelephone,
-              "customerName": customerName,
+              "customerTelephone": util.stringNull(inputTelephone),
+              "customerName": util.stringNull(inputTelName),
             },
           });
         }
@@ -613,25 +610,21 @@ Page({
             vipVo.defaultDiscountRate = 100;
             vipVo.goodsDiscountList = [];
             that.setData({
-              vipVo: vipVo,
+              vipVo,
             });
           } else {
             that.setData({
               vipVo,
             });
+            if (updatePriceFlag === true) {
+              this.updateGoodDiscountRate()
+            }
           }
-
         }
-        this.updateGoodDiscountRate()
+        that.onShow();
       })
     } else {
-      that.setData({
-        vipVo: {
-          "customerTelephone": customerTelephone,
-          "customerName": customerName,
-        },
-      });
-      this.updateGoodDiscountRate()
+      that.onShow();
     }
   },
 
@@ -652,8 +645,6 @@ Page({
         goodsGiftItem.discountedPrice = Number(util.accDiv(util.accMul(goodsGiftItem.retailPrice, goodsGiftItem.discountRate), 100).toFixed(2));
         goodsGiftItem.discountedAmount = Number(util.accMul(goodsGiftItem.discountedPrice, goodsGiftItem.goodsNumber));
       }
-
-
     }
   },
   //获取该商品的折扣率
@@ -757,25 +748,22 @@ Page({
   inputTel: function(e) {
     const that = this;
     const tel = e.detail.value;
-    const {
-      customerTelephone
-    } = this.data;
+
     if (tel.length >= 11) {
       if (reg.phone.test(tel)) {
         this.setData({
-          customerTelephone: tel,
+          inputTelephone: tel,
           addServiceDetailList: [],
         });
-        this.getVipVo();
+        this.getVipVo(true);
       } else {
         util.showErrorToast('请输入正确的手机号格式！');
       }
       return;
     }
     this.setData({
-      vipVo: null,
-
-      customerTelephone: tel,
+      vipVo: {},
+      inputTelephone: tel,
       addServiceDetailList: [],
     });
   },
@@ -785,10 +773,10 @@ Page({
       vipVo
     } = this.data;
     vipVo.customerName = e.detail.value;
-    const customerName = e.detail.value;
+    const inputTelName = e.detail.value;
     this.setData({
       vipVo,
-      customerName
+      inputTelName
     });
   },
   //删除业务

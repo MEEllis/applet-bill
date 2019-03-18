@@ -18,6 +18,7 @@ Page({
     pageSize: 20,
     loadingMore: true,
     scrollHeight: 0,
+    permissionCommission: 0,
   },
 
   /**
@@ -32,6 +33,7 @@ Page({
       endTime,
     });
     this.getGoodsList()
+    this.getCompanyParam()
   },
 
   /**
@@ -71,7 +73,13 @@ Page({
     this.searchSubmit()
   },
   //关键字搜索
-  searchSubmit: function() {
+  searchSubmit: function(e) {
+    if (e) {
+      const querykey = e.detail.value
+      this.setData({
+        queryKey: querykey,
+      });
+    }
     this.setData({
       pageNumber: 1,
       dataList: [],
@@ -113,10 +121,23 @@ Page({
     });
     this.getGoodsList();
   },
+  // 获取营业款明细信息
+  getCompanyParam: function () {
+    const _this = this;
+
+    util.request(api.getCompanyParam, {
+      code: 'C04001',
+    }).then(res => {
+      const permissionCommission = Number(res.data.paramValue);
+      _this.setData({
+        permissionCommission,
+      });
+    });
+  },
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function() {
+  onShareAppMessage: function () {
 
   }
 })

@@ -16,6 +16,7 @@ Page({
     thirdPartyOn: true,
     installmentOn: true,
     payAmountOn: true,
+    permissionCommission: 0,
   },
 
   /**
@@ -27,6 +28,7 @@ Page({
       billsId
     });
     this.getDetail();
+    this.getCompanyParam()
   },
   //拨打手机号
   tapTel: function(e) {
@@ -89,6 +91,19 @@ Page({
     } = this.data;
     wx.redirectTo({
       url: `/pages/billing/paySuccess/paySuccess?totalPayAmount=${orderVo.totalAmount}&billsId=${billsId}`
+    });
+  },
+  // 获取营业款明细信息
+  getCompanyParam: function () {
+    const _this = this;
+
+    util.request(api.getCompanyParam, {
+      code: 'C04001',
+    }).then(res => {
+      const permissionCommission = Number(res.data.paramValue);
+      _this.setData({
+        permissionCommission,
+      });
     });
   },
   /**

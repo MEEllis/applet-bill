@@ -15,6 +15,14 @@
         <icon type="clear" size="20"></icon>
       </view>
     </view>
+
+    <view class='remember-wrap' style='font-size: 28rpx;	color: #666666;'>
+      <checkbox-group bindchange="checkboxChange">
+        <label class="ui-checkbox" wx:key="{{index}}" wx:for="{{items}}">
+          <checkbox value="{{item.name}}" checked="{{item.checked}}" /> {{item.value}}
+        </label>
+      </checkbox-group>
+    </view>
     <view>
 
       <!-- 15116201365 123456  18963943990 123456 17700000001 abc123  ;trunk: 17702727227 123456;-->

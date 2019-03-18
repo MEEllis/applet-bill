@@ -28,6 +28,9 @@ Page({
     phoneImei: '', //手机串号
     reductionMarginAmount: '0', //减扣保证金金额
     remark: '', //明细备注
+    originalSetMeal: '', //原套餐
+    name: '', //姓名
+    companySubsidyFlag: 0, //公司补贴(标识)
     sectionId: '',
     systemNoList: [],
     operatorContactUnitList: [],
@@ -169,6 +172,14 @@ Page({
       }
     }
   },
+  bindchangeSubsidy: function (e) {
+    const {
+      value
+    } = e.detail;
+    this.setData({
+      'companySubsidyFlag': value?1:0,
+    })
+  },
   sumPrice: function() {
     const {
       commission,
@@ -238,6 +249,9 @@ Page({
       phoneImei,
       reductionMarginAmount,
       remark,
+      originalSetMeal,
+      name,
+      companySubsidyFlag,
       state, //状态： 0：新增  1 查看（修改）
       itemIndex, //集合索引
       operatorDetailList, //集合
@@ -277,6 +291,9 @@ Page({
         phoneImei,
         reductionMarginAmount,
         remark,
+        originalSetMeal,
+        name,
+        companySubsidyFlag,
       })
     }
     //修改
@@ -305,6 +322,9 @@ Page({
         phoneImei,
         reductionMarginAmount,
         remark,
+        originalSetMeal,
+        name,
+        companySubsidyFlag,
       };
     }
     addPage.setData({
@@ -414,6 +434,9 @@ Page({
             phoneImei,
             reductionMarginAmount,
             remark,
+            originalSetMeal,
+            name,
+            companySubsidyFlag,
           } = detailItem
           this.setData({
             lastContactUnitId: contactUnitId,
@@ -435,6 +458,9 @@ Page({
             phoneImei,
             reductionMarginAmount,
             remark,
+            originalSetMeal,
+            name,
+            companySubsidyFlag,
           });
         }
       }

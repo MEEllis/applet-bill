@@ -134,9 +134,18 @@ Page({
               isCover: false,
             });
           }).then((res) => {
-            wx.reLaunch({
-              url: `/pages/billing/paySuccess/paySuccess?totalPayAmount=${totalPayAmount}&billsId=${res.data.billsId}`
+            wx.showModal({
+              title: '提示',
+              showCancel: false,
+              confirmColor: '#476EC9',
+              content: res.desc||"收款成功",
+              success: function () {
+                wx.reLaunch({
+                  url: `/pages/billing/paySuccess/paySuccess?totalPayAmount=${totalPayAmount}&billsId=${res.data.billsId}`
+                })
+              }
             })
+           
           }).catch((err) => {
             this.setData({
               isCover: true,

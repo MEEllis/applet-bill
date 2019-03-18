@@ -35,7 +35,7 @@ Page({
 
   tapNew: function() {
     wx.reLaunch({
-      url: '/pages/billing/addGood/addGood'
+      url: '/pages/billing/index/index?add=1'
     })
   },
   tapCur: function() {

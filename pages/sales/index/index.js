@@ -36,6 +36,7 @@ Page({
     operatorSort: 1,
     modalConfirmStartTime: '',
     modalConfirmEndTime: '',
+    permissionCommission:0,
   },
 
   /**
@@ -92,6 +93,8 @@ Page({
       wx.reLaunch({
         url: '/' + pages[pages.length - 1].route
       })
+    }else{
+      this.getCompanyParam()
     }
   },
   tabClick: function(e) {
@@ -312,6 +315,20 @@ Page({
       const tabContentObj3 = res.data;
       _this.setData({
         tabContentObj3,
+      });
+    });
+  },
+
+  // 获取营业款明细信息
+  getCompanyParam: function () {
+    const _this = this;
+
+    util.request(api.getCompanyParam, {
+      code: 'C04001',
+    }).then(res => {
+      const permissionCommission = Number(res.data.paramValue);
+      _this.setData({
+        permissionCommission,
       });
     });
   },

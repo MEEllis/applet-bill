@@ -23,7 +23,7 @@
       客户
     </view>
     <view class="weui-flex__item ">
-      <input class='txt-input' placeholder="姓名、手机号、会员卡号" value="{{customerKey}}" bindinput="inputcustomerKey" />
+      <input class='txt-input' placeholder="姓名、手机号、会员卡号" value="{{customerKey}}" bindinput="inputcustomerKey"  bindblur="inputcustomerKey" bindconfirm="inputcustomerKey"  />
     </view>
   </view>
 

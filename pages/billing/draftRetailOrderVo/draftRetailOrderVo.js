@@ -85,7 +85,13 @@ Page({
     this.searchSubmit()
   },
   //关键字搜索
-  searchSubmit: function() {
+  searchSubmit: function(e) {
+    if(e){
+      const queryKey = e.detail.value
+      this.setData({
+        queryKey,
+      });
+    }
     this.setData({
       pageNumber: 1,
       dataList: [],

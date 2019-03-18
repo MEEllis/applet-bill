@@ -124,6 +124,7 @@ function requestFly(url, data = {}, method = "POST", config) {
         'ERP-WX-TOKEN': wx.getStorageSync('token')
       },
       success: function(res) {
+        wx.hideLoading()
         if (res.statusCode == 200) {
           if (res.data.result == 1) {
             resolve(res.data);

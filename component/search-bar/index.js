@@ -35,6 +35,7 @@ Component({
   methods: {
     // 搜索
     searchSubmit: function(e) {
+      this.inputTyping(e)
       this.triggerSearch()
     },
     // 监听输入框

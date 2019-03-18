@@ -111,7 +111,9 @@ Page({
   },
   relogin: function(e) {
     try {
-      wx.clearStorageSync()
+      wx.removeStorageSync('userInfo');
+      wx.removeStorageSync('token');
+      wx.removeStorageSync('companyList');
     } catch (e) {
 
     }

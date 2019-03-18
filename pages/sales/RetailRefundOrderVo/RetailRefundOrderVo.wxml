@@ -41,7 +41,7 @@
       <view class="weui-flex">
         <text class="">单据备注</text>
         <view class="weui-flex__item">
-          <input class='remark' type="text" bindinput="inputRemark" placeholder-class='placeholder' placeholder="单据备注" value="{{remark}}" />
+          <input class='remark' type="text" bindconfirm="inputRemark" bindinput="inputRemark" bindblur="inputRemark" placeholder-class='placeholder' placeholder="单据备注" value="{{remark}}" />
         </view>
       </view>
       <view class="weui-flex">
@@ -54,6 +54,13 @@
         <text class="">过账时间</text>
         <view class="weui-flex__item">
           <view class="">{{numberFr.stringNull(orderVo.postDateStr)}}</view>
+        </view>
+      </view>
+
+      <view class="weui-flex"  wx:if="{{permissionCommission===1}}">
+        <text class="">总提成</text>
+        <view class="weui-flex__item">
+          {{numberFr.formatNum(orderVo.bonusTotalAmount,2)}}
         </view>
       </view>
 
@@ -154,6 +161,32 @@
                 {{numberFr.stringNull(item.storageName)}}
               </view>
             </view>
+
+            <view wx:if="{{permissionCommission===1}}">
+              <view class="weui-flex">
+                <text class="">提成金额</text>
+                <view class="weui-flex__item tr">
+                  {{numberFr.formatNum(item.bonusAmount,2)}}
+                </view>
+              </view>
+
+              <view class="weui-flex">
+                <text class="">额外奖惩</text>
+                <view class="weui-flex__item tr">
+                  {{numberFr.formatNum(item.bonusExtAmount,2)}}
+                </view>
+              </view>
+
+              <view class="weui-flex">
+                <text class="">总提成</text>
+                <view class="weui-flex__item tr">
+                  {{numberFr.formatNum(item.bonusTotalAmount,2)}}
+                </view>
+              </view>
+
+            </view>
+
+
             <view class="weui-flex">
               <text class="">备注</text>
               <view class="weui-flex__item remark tr">
@@ -194,6 +227,31 @@
                   {{numberFr.stringNull(giftItem.storageName)}}
                 </view>
               </view>
+               
+            <view wx:if="{{permissionCommission===1}}">
+              <view class="weui-flex">
+                <text class="">提成金额</text>
+                <view class="weui-flex__item tr">
+                  {{numberFr.formatNum(giftItem.bonusAmount,2)}}
+                </view>
+              </view>
+
+              <view class="weui-flex">
+                <text class="">额外奖惩</text>
+                <view class="weui-flex__item tr">
+                  {{numberFr.formatNum(giftItem.bonusExtAmount,2)}}
+                </view>
+              </view>
+
+              <view class="weui-flex">
+                <text class="">总提成</text>
+                <view class="weui-flex__item tr">
+                  {{numberFr.formatNum(giftItem.bonusTotalAmount,2)}}
+                </view>
+              </view>
+
+            </view>
+            
 
               <view class="weui-flex">
                 <text class="">备注</text>
@@ -303,6 +361,31 @@
                 {{numberFr.stringNull(item.salesManBName)}}
               </view>
             </view>
+             
+            <view wx:if="{{permissionCommission===1}}">
+              <view class="weui-flex">
+                <text class="">提成金额</text>
+                <view class="weui-flex__item tr">
+                  {{numberFr.formatNum(item.bonusAmount,2)}}
+                </view>
+              </view>
+
+              <view class="weui-flex">
+                <text class="">额外奖惩</text>
+                <view class="weui-flex__item tr">
+                  {{numberFr.formatNum(item.bonusExtAmount,2)}}
+                </view>
+              </view>
+
+              <view class="weui-flex">
+                <text class="">总提成</text>
+                <view class="weui-flex__item tr">
+                  {{numberFr.formatNum(item.bonusTotalAmount,2)}}
+                </view>
+              </view>
+
+            </view>
+            
             <view class="weui-flex">
               <text class="">备注</text>
               <view class="weui-flex__item remark tr">
@@ -397,6 +480,31 @@
                 {{numberFr.stringNull(item.salesManBName)}}
               </view>
             </view>
+             
+            <view wx:if="{{permissionCommission===1}}">
+              <view class="weui-flex">
+                <text class="">提成金额</text>
+                <view class="weui-flex__item tr">
+                  {{numberFr.formatNum(item.bonusAmount,2)}}
+                </view>
+              </view>
+
+              <view class="weui-flex">
+                <text class="">额外奖惩</text>
+                <view class="weui-flex__item tr">
+                  {{numberFr.formatNum(item.bonusExtAmount,2)}}
+                </view>
+              </view>
+
+              <view class="weui-flex">
+                <text class="">总提成</text>
+                <view class="weui-flex__item tr">
+                  {{numberFr.formatNum(item.bonusTotalAmount,2)}}
+                </view>
+              </view>
+
+            </view>
+            
             <view class="weui-flex">
               <text class="">备注</text>
               <view class="weui-flex__item remark tr">
@@ -471,6 +579,31 @@
                 {{numberFr.stringNull(item.salesManBName)}}
               </view>
             </view>
+             
+            <view wx:if="{{permissionCommission===1}}">
+              <view class="weui-flex">
+                <text class="">提成金额</text>
+                <view class="weui-flex__item tr">
+                  {{numberFr.formatNum(item.bonusAmount,2)}}
+                </view>
+              </view>
+
+              <view class="weui-flex">
+                <text class="">额外奖惩</text>
+                <view class="weui-flex__item tr">
+                  {{numberFr.formatNum(item.bonusExtAmount,2)}}
+                </view>
+              </view>
+
+              <view class="weui-flex">
+                <text class="">总提成</text>
+                <view class="weui-flex__item tr">
+                  {{numberFr.formatNum(item.bonusTotalAmount,2)}}
+                </view>
+              </view>
+
+            </view>
+            
             <view class="weui-flex">
               <text class="">备注</text>
               <view class="weui-flex__item remark tr">
@@ -565,6 +698,31 @@
                 {{numberFr.stringNull(item.salesManBName)}}
               </view>
             </view>
+             
+            <view wx:if="{{permissionCommission===1}}">
+              <view class="weui-flex">
+                <text class="">提成金额</text>
+                <view class="weui-flex__item tr">
+                  {{numberFr.formatNum(item.bonusAmount,2)}}
+                </view>
+              </view>
+
+              <view class="weui-flex">
+                <text class="">额外奖惩</text>
+                <view class="weui-flex__item tr">
+                  {{numberFr.formatNum(item.bonusExtAmount,2)}}
+                </view>
+              </view>
+
+              <view class="weui-flex">
+                <text class="">总提成</text>
+                <view class="weui-flex__item tr">
+                  {{numberFr.formatNum(item.bonusTotalAmount,2)}}
+                </view>
+              </view>
+
+            </view>
+            
             <view class="weui-flex">
               <text class="">备注</text>
               <view class="weui-flex__item remark tr">

@@ -1,16 +1,17 @@
 {
 	"description": "项目配置文件。",
 	"setting": {
-		"urlCheck": true,
+		"urlCheck": false,
 		"es6": true,
 		"postcss": true,
 		"minified": true,
-		"newFeature": true
+		"newFeature": true,
+		"autoAudits": false
 	},
 	"compileType": "miniprogram",
-	"libVersion": "2.3.2",
+	"libVersion": "2.6.2",
 	"appid": "wxbebb5fca8a3b9e3d",
-	"projectname": "applet-bills",
+	"projectname": "applet-bill",
 	"isGameTourist": false,
 	"condition": {
 		"search": {
@@ -30,7 +31,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 33,
+			"current": 17,
 			"list": [
 				{
 					"id": 0,
@@ -135,10 +136,11 @@
 					"query": "imeiId=49408"
 				},
 				{
-					"id": -1,
+					"id": 17,
 					"name": "billing",
 					"pathName": "pages/billing/index/index",
-					"query": ""
+					"query": "ok=1",
+					"scene": null
 				},
 				{
 					"id": -1,
@@ -233,7 +235,8 @@
 				{
 					"id": -1,
 					"name": "common/billOperator",
-					"pathName": "pages/common/billOperator/billOperator"
+					"pathName": "pages/common/billOperator/billOperator",
+					"query": ""
 				}
 			]
 		}

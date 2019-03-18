@@ -188,6 +188,34 @@
         </view>
         <view class="table-wrap">
           <scroll-view scroll-y='true' style="height:{{scrollHeightTab2}}px;" wx:if="{{tabContentObj2!==null}}">
+
+             <view wx:if="{{permissionCommission===1}}" class="table table6 mb-30">
+              <view class="weui-flex table-head ">
+                <view class="weui-flex__item name">
+                  提成
+                </view>
+                <view class="weui-flex__item tr count">
+             
+                </view>
+                <view class="weui-flex__item tr aomout">
+                  <view>总提成</view>
+                  <view class='f1'>{{numberFr.formatNum(tabContentObj2.commissionVo.totalAmount,2)}}</view>
+                </view>
+              </view>
+              <view class="weui-flex table-body" wx:key="*this" wx:for="{{tabContentObj2.commissionVo.detailList}}">
+                <view class=" weui-flex__item name">
+                  {{numberFr.stringNull(item.groupName)}}
+                </view>
+                <view class="weui-flex__item tr count">
+                
+                </view>
+                <view class="weui-flex__item tr aomout">
+                  {{numberFr.formatNum(item.amount,2)}}
+                </view>
+              </view>
+            </view>
+
+
             <navigator url="/pages/sales/goodsVo/goodsVo?startTime={{startTime2}}&endTime={{endTime2}}" class="table table1">
               <view class="weui-flex table-head ">
                 <view class="weui-flex__item name">

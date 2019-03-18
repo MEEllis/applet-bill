@@ -51,7 +51,7 @@
             <text class='iconfont icon-iconcustomer'></text>
           </view>
           <view class="weui-cell__bd">客户信息</view>
-          <view wx:if='{{vipVo.vipCardScore!==undefined&&customerTelephone.length===11}}' class="weui-cell__ft desc">
+          <view wx:if='{{vipVo.vipCardScore!==undefined&&inputTelephone.length===11}}' class="weui-cell__ft desc">
             <text wx:if='{{vipVo.status==1}}'>该会员已禁用,不享有相应会员类型服务</text>
             <text class='color1' wx:else hidden='{{discountRate==10}}'>该会员享受部分商品{{discountRate}}折优惠</text>
           </view>
@@ -62,23 +62,23 @@
           <view class="weui-flex">
             <text class='color3'>客户电话:</text>
             <view class=" weui-flex__item">
-              <input class='txt-input' type="number" placeholder-class='placeholder' placeholder="请输入(客户或会员)手机号码" value="{{customerTelephone}}" bindinput="inputTel" maxlength='11' />
+              <input class='txt-input' type="number" placeholder-class='placeholder' placeholder="请输入(客户或会员)手机号码" value="{{inputTelephone}}" bindinput="inputTel" bindconfirm="inputTel" bindblur='inputTel' maxlength='11' />
             </view>
           </view>
-          <view hidden='{{customerTelephone.length!==11}}' class="weui-flex">
+          <view hidden='{{inputTelephone.length!==11}}' class="weui-flex">
             <text class='color3'>客户姓名:</text>
             <view class=" weui-flex__item">
-              <text wx:if='{{vipVo.vipCardScore!==undefined&&customerTelephone.length===11}}'>{{numberFr.stringNull(vipVo.customerName)}}</text>
-              <input class='txt-input' wx:else bindinput="inputName" placeholder-class='placeholder' placeholder="请输入客户姓名" value="{{customerName}}" />
+              <text wx:if='{{vipVo.vipCardScore!==undefined&&inputTelephone.length===11}}'>{{numberFr.stringNull(vipVo.customerName)}}</text>
+              <input class='txt-input' wx:else bindinput="inputName"  bindconfirm="inputName" placeholder-class='placeholder' placeholder="请输入客户姓名" value="{{inputTelName}}"  bindblur='inputName'/>
             </view>
           </view>
-          <view wx:if='{{vipVo.vipCardScore!==undefined&&customerTelephone.length===11}}' class="weui-flex">
+          <view wx:if='{{vipVo.vipCardScore!==undefined&&inputTelephone.length===11}}' class="weui-flex">
             <text class='color3'>会员类型:</text>
             <view class=" weui-flex__item">
               {{numberFr.stringNull(vipVo.vipCardTypeName)}}
             </view>
           </view>
-          <view wx:if='{{vipVo.vipCardScore!==undefined&&customerTelephone.length===11}}' class="weui-flex jf">
+          <view wx:if='{{vipVo.vipCardScore!==undefined&&inputTelephone.length===11}}' class="weui-flex jf">
             <text class='color3'>会员积分:</text>
             <view class=" weui-flex__item">
               {{numberFr.formatNum(vipVo.vipCardScore||0)}}

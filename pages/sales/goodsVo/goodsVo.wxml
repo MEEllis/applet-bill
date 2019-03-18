@@ -6,7 +6,7 @@
     <form class="weui-search-bar__form">
       <view class="weui-search-bar__box">
         <icon class="weui-icon-search_in-box" type="search" size="14"></icon>
-        <input type="text" confirm-type='search' class="weui-search-bar__input" placeholder="商品类别/品牌/型号/商品名称/条码/串号" value="{{queryKey}}" focus="{{inputShowed}}" bindinput="inputTyping" bindconfirm="searchSubmit" />
+        <input type="text" confirm-type='search' class="weui-search-bar__input" placeholder="商品类别/品牌/型号/商品名称/条码/串号" value="{{queryKey}}" focus="{{inputShowed}}" bindinput="inputTyping" bindblur="inputTyping"  bindconfirm="searchSubmit" />
         <view class="weui-icon-clear" wx:if="{{queryKey.length > 0}}" bindtap="clearInput">
           <icon type="clear" size="14"></icon>
         </view>
@@ -50,6 +50,22 @@
             <view class="">折后金额:{{numberFr.formatNum(item.amount,2)}}</view>
           </view>
         </view>
+        <view wx:if="{{permissionCommission===1}}">
+         <view class="weui-flex">
+          <view class="weui-flex__item">
+            <view>提成金额:{{numberFr.formatNum(item.bonusAmount,2)}}</view>
+          </view>
+          <view class="weui-flex__item">
+            <view>额外奖惩:{{numberFr.formatNum(item.bonusExtAmount,2)}}</view>
+          </view>
+        </view>
+         <view class="weui-flex">
+          <view class="weui-flex__item">
+            <view>总提成:{{numberFr.formatNum(item.bonusTotalAmount,2)}}</view>
+          </view>
+        </view>
+        </view>
+       
       </view>
       <view class='list-item-footer'>
         <view class='clearfix'>
@@ -62,8 +78,12 @@
   </scroll-view>
   <view class="">
     <view class="weui-flex sum-wrap">
-      <view class="weui-flex__item sum ">
+      <view class="weui-flex__item">
         合计
+      </view>
+       <view wx:if="{{permissionCommission===1}}" class="weui-flex__item aomout tr">
+        <view class='color3'>总提成</view>
+        <view class='f1' >{{numberFr.formatNum((totalVo.bonusTotalAmount===undefined?0:totalVo.bonusTotalAmount),2)}}</view>
       </view>
       <view class="weui-flex__item tr count">
         <view class='color3'>数量</view>

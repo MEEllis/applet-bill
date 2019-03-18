@@ -3,23 +3,22 @@ let baseApiRootUrl
 //NewApiRootUrl = 'http://127.0.0.1:8080/wxapi/'; // 预生产的接口
 
  // 提交测试的接口
+
 NewApiRootUrl = 'https://branch.phoneerp.com/wxapi/';
 baseApiRootUrl = 'https://branchapi.phoneerp.com/';
 
-// NewApiRootUrl = 'http://192.168.0.162/wxapi/'; // 后台联调的接口
-
-
-
+// 后台联调的接口
+// NewApiRootUrl = 'http://192.168.0.162/wxapi/'; 
+// baseApiRootUrl = 'http://192.168.0.162/';
 
 // 预生产的接口
-//NewApiRootUrl = 'https://pre.phoneerp.com/wxapi/'; 
-
+// NewApiRootUrl = 'https://pre.phoneerp.com/wxapi/'; 
+// baseApiRootUrl = 'https://preapi.phoneerp.com/';
 // 线上的接口
-NewApiRootUrl = 'https://www.phoneerp.com/wxapi/';
-baseApiRootUrl = 'https://api.phoneerp.com/';
-
-
+// NewApiRootUrl = 'https://www.phoneerp.com/wxapi/';
+// baseApiRootUrl = 'https://api.phoneerp.com/';
 // 模拟接口地址
+
 // NewApiRootUrl = 'http://rap2api.taobao.org/app/mock/13207/wxapi/'; 
 // baseApiRootUrl = 'http://rap2api.taobao.org/app/mock/13207/wxapi/';
 //开发环境
@@ -36,6 +35,7 @@ module.exports = {
   getStockDetailGoodsVo: NewApiRootUrl + 'common/getStockDetailGoodsVo', //单个在库商品查询(详情)
   getImeiStockVoPageList: NewApiRootUrl + 'common/getImeiStockVoPageList', // 在库串号分页查询
 
+  getCompanyParam: NewApiRootUrl + 'common/getCompanyParam', //  我的销量
   getMySalesStatistics: NewApiRootUrl + 'common/getMySalesStatistics', //  我的销量
   getGoodsSalesVoPageList: NewApiRootUrl + 'common/getGoodsSalesVoPageList', //   我的商品销售流水
   getOperatorSalesVoPageList: NewApiRootUrl + 'common/getOperatorSalesVoPageList', //   我的运营商业务流水

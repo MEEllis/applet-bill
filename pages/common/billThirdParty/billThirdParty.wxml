@@ -34,12 +34,12 @@
     <view class="weui-cell">
       <text class='color666'>业务号</text>
       <view class="weui-cell__bd tr">
-        <input class='txt-input' type="text" placeholder="请输入业务号" value="{{businessNo}}" bindinput="bindText" data-target='businessNo' />
+        <input class='txt-input' type="text" placeholder="请输入业务号" value="{{businessNo}}"  bindconfirm="bindText" bindblur="bindText"  bindinput="bindText" data-target='businessNo' />
       </view>
     </view>
     <view class="weui-cell">
       <view class="weui-cell__bd tr">
-        <input class='txt-input-remark' type="text" placeholder="点我添加备注" value="{{remark}}" maxlength='200' bindinput="bindText" data-target='remark' />
+        <input class='txt-input-remark' type="text" placeholder="点我添加备注" value="{{remark}}" maxlength='200' bindinput="bindText"  bindblur="bindText"  bindconfirm="bindText" data-target='remark' />
       </view>
     </view>
   </view>

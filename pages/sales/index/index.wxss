@@ -207,6 +207,8 @@
   margin-right: 20rpx;
 }
 
+
+
 .table1 .table-head {
   background-image: linear-gradient(110deg, #5480f1 0%, #2d65f4 100%);
 }
@@ -225,4 +227,8 @@
 
 .table5 .table-head {
   background-image: linear-gradient(110deg, #fab77b 0%, #fc76b3 100%);
+}
+
+.table6 .table-head {
+  background-image: linear-gradient(110deg, #C7C7E2 0%, #484891 100%);
 }

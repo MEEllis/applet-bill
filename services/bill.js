@@ -102,9 +102,9 @@ function saveAndPostDraftRetailVo(saveData,callback) {
     }
     const addData = {
       "sectionId": sectionId,
-      "customerId": vipVo.customerId,
-      "customerName": vipVo.customerName,
-      "customerTelephone": vipVo.customerTelephone,
+      "customerId": util.stringNull(vipVo.customerId),
+      "customerName": util.stringNull(vipVo.customerName),
+      "customerTelephone": util.stringNull(vipVo.customerTelephone),
       "contactUnitId": contactUnitId,
       "scanPayVo": scanPayVo,
       "ignoredAmount": ignoredAmount,

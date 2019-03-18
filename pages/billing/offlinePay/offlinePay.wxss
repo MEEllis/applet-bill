@@ -29,10 +29,18 @@ page {
 }
 
 .btnBlue {
-  margin-right: 30rpx;
+ width:700rpx;
 }
 
 .y1 {
   font-size: 26rpx;
   color: #8c8c8c;
+}
+
+
+.pay {
+  width: 720rpx;
+  height: 227rpx;
+  display: block;
+  margin: 0 auto;
 }

@@ -76,7 +76,7 @@
     </view>
     <view class="weui-cell">
       <view class="weui-cell__bd tr">
-        <input class='txt-input-remark' type="text" placeholder="点我添加备注" value="{{remark}}" maxlength='200' bindinput="bindText" data-target='remark' />
+        <input class='txt-input-remark' type="text" placeholder="点我添加备注" value="{{remark}}" maxlength='200' bindinput="bindText" bindconfirm="bindText"  bindblur="bindText"  data-target='remark' />
       </view>
     </view>
   </view>

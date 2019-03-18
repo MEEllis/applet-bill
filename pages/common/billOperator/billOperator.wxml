@@ -26,18 +26,29 @@
       <view class="weui-cell__ft iconfont icon-shangyige"></view>
     </view>
     <view class="weui-cell">
+      <text class='color666'>原套餐</text>
+      <view class="weui-cell__bd tr">
+        <input class='txt-input' type="text" placeholder="请输入原套餐" value="{{originalSetMeal}}" bindinput="bindText" bindblur="bindText" bindconfirm="bindText" data-target='originalSetMeal' />
+      </view>
+    </view>
+
+    <view class="weui-cell">
       <text class='colore94'>*</text>
       <text class='color666'>实际收款</text>
       <view class="weui-cell__bd tr">
         <inputNum class='txt-input-price' num="{{receivedAmount}}" bindchangeEvent='bindInputPrice' data-target='receivedAmount'></inputNum>
       </view>
     </view>
+
     <view class="weui-cell">
-      <text class='color666'>扣减保证金</text>
+      <text class='colore94'>*</text>
+      <text class='color666'>公司补贴</text>
       <view class="weui-cell__bd tr">
-        <inputNum class='txt-input-price' num="{{reductionMarginAmount}}" bindchangeEvent='bindInputPrice' data-target='reductionMarginAmount'></inputNum>
+        <switch checked="{{companySubsidyFlag}}" bindchange='bindchangeSubsidy'/>
       </view>
     </view>
+
+
     <view class="weui-cell">
       <text class='colore94'>*</text>
       <text class='color666'>数量</text>
@@ -72,25 +83,41 @@
     <view class="weui-cell">
       <text class='color666'>业务号</text>
       <view class="weui-cell__bd tr">
-        <input class='txt-input' type="text" placeholder="请输入业务号" value="{{businessNo}}" bindinput="bindText" data-target='businessNo' />
+        <input class='txt-input' type="text" placeholder="请输入业务号" value="{{businessNo}}" bindinput="bindText" bindblur="bindText" bindconfirm="bindText" data-target='businessNo' />
       </view>
     </view>
+
+    <view class="weui-cell">
+      <text class='color666'>姓名</text>
+      <view class="weui-cell__bd tr">
+        <input class='txt-input' type="text" placeholder="请输入姓名" value="{{name}}" bindinput="bindText" bindblur="bindText" bindconfirm="bindText" data-target='name' />
+      </view>
+    </view>
+
     <view class="weui-cell">
       <text class='color666'>电话号码</text>
       <view class="weui-cell__bd tr">
-        <input class='txt-input' type="text" placeholder="请输入电话号码" value="{{telephone}}" bindinput="bindText" data-target='telephone' />
+        <input class='txt-input' type="text" placeholder="请输入电话号码" value="{{telephone}}" bindinput="bindText" bindblur="bindText" data-target='telephone' bindconfirm="bindText" />
       </view>
     </view>
     <view class="weui-cell">
       <text class='color666'>手机串号</text>
       <view class="weui-cell__bd tr">
-        <input class='txt-input' type="text" placeholder="请输入手机串号" value="{{phoneImei}}" bindinput="bindText" data-target='phoneImei' />
+        <input class='txt-input' type="text" placeholder="请输入手机串号" value="{{phoneImei}}" bindinput="bindText" bindblur="bindText" data-target='phoneImei' bindconfirm="bindText" />
+      </view>
+    </view>
+
+
+    <view class="weui-cell">
+      <text class='color666'>扣减运营商预存款</text>
+      <view class="weui-cell__bd tr">
+        <inputNum class='txt-input-price' num="{{reductionMarginAmount}}" bindchangeEvent='bindInputPrice' data-target='reductionMarginAmount'></inputNum>
       </view>
     </view>
 
     <view class="weui-cell">
       <view class="weui-cell__bd tr">
-        <input class='txt-input-remark' type="text" placeholder="点我添加备注" value="{{remark}}" maxlength='200' bindinput="bindText" data-target='remark' />
+        <input class='txt-input-remark' type="text" placeholder="点我添加备注" value="{{remark}}" maxlength='200' bindinput="bindText" bindblur="bindText" bindconfirm="bindText" data-target='remark' />
       </view>
     </view>
   </view>

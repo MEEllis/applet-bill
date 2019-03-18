@@ -81,13 +81,13 @@
     <view class="weui-cell">
       <text class='color666'>合同号</text>
       <view class="weui-cell__bd tr">
-        <input class='txt-input' type="text" placeholder="请输入合同号" value="{{contractNo}}" bindinput="bindText" data-target='contractNo' />
+        <input class='txt-input' type="text" placeholder="请输入合同号" value="{{contractNo}}" bindconfirm="bindText" bindinput="bindText" bindblur="bindText"  data-target='contractNo' />
       </view>
     </view>
     <view class="weui-cell">
       <text class='color666'>串号</text>
       <view class="weui-cell__bd tr">
-        <input class='txt-input' type="text" placeholder="请输入串号" value="{{phoneImei}}" bindinput="bindText" data-target='phoneImei' />
+        <input class='txt-input' type="text" placeholder="请输入串号" value="{{phoneImei}}" bindconfirm="bindText" bindinput="bindText" bindblur="bindText"  data-target='phoneImei' />
       </view>
     </view>
     <view class="weui-cell">
@@ -105,7 +105,7 @@
     </view>
     <view class="weui-cell">
       <view class="weui-cell__bd tr">
-        <input class='txt-input-remark' type="text" placeholder="点我添加备注" value="{{remark}}" maxlength='200' bindinput="bindText" data-target='remark' />
+        <input class='txt-input-remark' type="text" placeholder="点我添加备注" value="{{remark}}" maxlength='200' bindinput="bindText" bindconfirm="bindText" bindblur="bindText"  data-target='remark' />
       </view>
     </view>
   </view>

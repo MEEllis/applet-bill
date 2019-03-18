@@ -18,6 +18,7 @@ Page({
     receiptMainPage: null,
     dataVo: null,
     scrollHeight: 0,
+    isCover: true,
   },
 
   /**
@@ -51,13 +52,7 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function() {
-    const that = this;
-    util.getScrollHeightByEle(['btnBlue', 'bottom-wrap', 'top-wrap']).then((scrollHeight) => {
-      // 计算主体部分高度,单位为px
-      that.setData({
-        scrollHeight: scrollHeight - 1,
-      })
-    })
+    this.setHeight()
   },
 
   inputAmount: function(e) {
@@ -119,6 +114,7 @@ Page({
       that.setData({
         dataVo: returnObj,
       })
+      this.setHeight()
     })
   },
   setDelta: function() {
@@ -146,7 +142,11 @@ Page({
       });
     }
   },
-  tapOk: function() {
+  tapOk: function (e) {
+    const {
+      paytype
+    } = e.currentTarget.dataset;
+    const that = this;
     const {
       sectionId,
       addPage,
@@ -155,30 +155,114 @@ Page({
       totalAmount,
       totalPayAmount,
       dataVo,
-      integralDeductionAmount
+      integralDeductionAmount,
+      debtAmount
     } = this.data;
 
     if (addPage != null && receiptMainPage != null) {
       const {
         remark
       } = receiptMainPage.data;
-      const saveData = {
-        sectionId,
-        ignoredAmount,
-        totalAmount,
-        integralDeductionAmount,
-        remark,
-        addPage,
-        dataVo,
-        onlinePayFlag: 0,
+      //扫码支付
+      if (paytype==='auto_discern'){
+        if (Number(totalPayAmount) === 0) {
+          util.showErrorToast('应收为0，请点击线下收款结单！')
+          return;
+        }
+        dataVo[8][0].amount = debtAmount;
+        //扫码
+        wx.scanCode({
+          success: (res) => {
+            let saveData = {
+              sectionId,
+              ignoredAmount,
+              totalAmount,
+              integralDeductionAmount,
+              remark,
+              addPage,
+              onlinePayFlag: 1,
+              scanPayVo: {
+                payType: paytype,
+                authNo: res.result,
+                amount: util.accMul(debtAmount, 100),
+              },
+              dataVo: {
+                8: [dataVo[8][0]]
+              }
+            }
+            //现金支付+网上支付
+            if (Number(totalPayAmount) !== Number(debtAmount)){
+              saveData.onlinePayFlag=2;
+              saveData.dataVo = dataVo;
+            }
+
+            bill.saveAndPostDraftRetailVo(saveData, () => {
+              that.setData({
+                isCover: false,
+              });
+            }).then((res) => {
+              wx.showModal({
+                title: '提示',
+                showCancel: false,
+                confirmColor: '#476EC9',
+                content: res.desc || "收款成功",
+                success: function () {
+                  wx.reLaunch({
+                    url: `/pages/billing/paySuccess/paySuccess?totalPayAmount=${totalPayAmount}&billsId=${res.data.billsId}`
+                  })
+                }
+              })
+
+            }).catch((err) => {
+              this.setData({
+                isCover: true,
+              });
+            });
+
+          }
+        })
       }
-      bill.saveAndPostDraftRetailVo(saveData).then((res) => {
-        wx.reLaunch({
-          url: `/pages/billing/paySuccess/paySuccess?totalPayAmount=${totalPayAmount}&billsId=${res.data.billsId}`
-        });
-      })
+      //现金支付
+      else{
+        const saveData = {
+          sectionId,
+          ignoredAmount,
+          totalAmount,
+          integralDeductionAmount,
+          remark,
+          addPage,
+          dataVo,
+          onlinePayFlag: 0,
+        }
+        bill.saveAndPostDraftRetailVo(saveData).then((res) => {
+          wx.showModal({
+            title: '提示',
+            showCancel: false,
+            confirmColor: '#476EC9',
+            content: res.desc || "收款成功",
+            success: function () {
+              wx.reLaunch({
+                url: `/pages/billing/paySuccess/paySuccess?totalPayAmount=${totalPayAmount}&billsId=${res.data.billsId}`
+              })
+            }
+          })
+        })
+      }
+
+     
     } else {
       util.showErrorToast('操作有误！')
     }
+  },
+  
+  setHeight:function(){
+    const that = this;
+    util.getScrollHeightByEle(['btnBlue', 'bottom-wrap', 'top-wrap', 'pay']).then((scrollHeight) => {
+      // 计算主体部分高度,单位为px
+      that.setData({
+        scrollHeight: scrollHeight - 1,
+      })
+    })
   }
+
 })
